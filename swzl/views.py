@@ -16,7 +16,6 @@ import random
 import logging
 import requests
 import os
-import commands
 import ast
 
 logger = logging.getLogger(__name__)
@@ -273,9 +272,9 @@ def user_login(request):
                 user_info = UserInfo.objects.get(username=login_username)
             if user_info is not None:
                 if user_info.password == login_password:
-                    return render(request, 'upload.html', context)
+                    return render(request, 'manage_lost.html', context)
                 else:
-                    return render(request, 'upload.html', context)
+                    return render(request, 'manage_lost.html', context)
         except:
             return _generate_json_message(False, "login false")
 
