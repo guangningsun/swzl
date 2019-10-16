@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>缴费管理系统</title>
+    <meta name="description" content="mis">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/css/app.v1.css">
+    <link rel="stylesheet" href="/static/chemira/css/room_manager.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-datetimepicker.min.css">
+    <!--[if lt IE 9]>
+    <script src="js/ie/respond.min.js" cache="false"></script>
+    <script src="js/ie/html5.js" cache="false"></script>
+    <script src="js/ie/fix.js" cache="false"></script> <![endif]-->
+    <script src="/static/chemira/css/app.v1.js"></script>
+    <script src="/static/chemira/js/bootstrap3-validation.js"></script>
+    <script src="/static/chemira/js/tableExport.js"></script>
+    <script src="/static/chemira/js/jquery.base64.js"></script>
+    <script src="/static/chemira/js/bootstrap-table.js"></script>
+    <script src="/static/chemira/js/bootstrap-table-export.js"></script>
+    <script src="/static/chemira/js/bootstrap-table-zh-CN.js"></script>
+    <script>
+    $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN']);
+    </script>
+    <script src="/static/chemira/js/jquery.toggle-password.js"></script>
+    <script src="/static/chemira/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/static/chemira/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <script src="/static/chemira/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+    <section class="hbox stretch">
+        <!-- .aside -->
+        <aside class="bg-dark aside-sm" id="nav">
+            <section class="vbox">
+                <header class="dker nav-bar">
+                    <a href="#" class="nav-brand" data-toggle="fullscreen" id="navi_domain">缴费软件</a>
+                    <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
+                        <i class="icon-comment-alt"></i>
+                    </a>
+                </header>
+                <footer class="footer bg-gradient hidden-xs">
+                    <a href="/logout" class="btn btn-sm btn-link m-r-n-xs pull-right">
+                        <i class="icon-off"></i>
+                    </a>
+                </footer>
+                <section>
+                    <!-- user -->
+                    <div class="bg-success nav-user hidden-xs pos-rlt">
+                        <div class="nav-avatar pos-rlt">
+                            <a href="#" class="thumb-sm avatar animated rollIn" data-toggle="dropdown">
+                                <img src="/static/images/avatar.jpg" alt="" class="">
+                                <span class="caret caret-white"></span>
+                            </a>
+                            <ul class="dropdown-menu m-t-sm animated fadeInLeft">
+                                <span class="arrow top"></span>
+                                <li><a href="/logout">logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="nav-msg">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <b class="badge badge-white count-n" id="navi_user_name"></b>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- / user -->
+                    <!-- nav -->
+                    <nav class="nav-primary hidden-xs">
+                            <ul class="nav">
+                                <li>
+                                    <a href="/manage_user">
+                                        <i class="icon-home"></i>
+                                        <span>用户管理</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/manage_student">
+                                        <!-- <b class="badge bg-primary pull-right">3</b>  -->
+                                        <i class="icon-building"></i>
+                                        <span>学生管理</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/manage_class">
+                                        <i class="icon-sitemap"></i>
+                                        <span>班级管理</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="#">
+                                        <i class="icon-tasks"></i>
+                                        <span>缴费管理</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/manage_p_class">
+                                        <i class="icon-tasks"></i>
+                                        <span>缴费类别</span>
+                                    </a>
+                                </li>
+                                <li >
+                                    <a href="/manage_report">
+                                        <i class="icon-tasks"></i>
+                                        <span>报表管理</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/settings">
+                                        <!-- <b class="badge bg-primary pull-right">3</b>  -->
+                                        <i class="icon-book"></i>
+                                        <span>设&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp置</span>
+                                    </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- / nav -->
+                    <!-- note -->
+                    <!-- <div class="bg-danger wrapper hidden-vertical animated rollIn text-sm">
+                            <a href="#" data-dismiss="alert" class="pull-right m-r-n-sm m-t-n-sm"><i class="icon-close icon-remove "></i></a>
+                            Hi, this is welcome msg.
+                        </div> -->
+                    <!-- / note -->
+                </section>
+            </section>
+        </aside>
+        <!-- /.aside -->
+        <!-- .vbox -->
+        <section id="content">
+            <section>
+                <header class="header bg-white b-b">
+                    <p>缴费管理</p>
+                </header>
+                <div class="container">
+                    <!-- <div class="panel" id="user_table"></div> -->
+                    <div id="toolbar" class="pull-left col-">
+                        <button id="remove" class="btn btn-danger">
+                            <i class="icon-remove"></i>删除缴费记录
+                        </button>
+                        <button id="addSingle" class="btn btn-success " data-toggle="modal" data-target="#addSingleRoom">
+                            <i class="icon-plus"></i>添加缴费记录
+                        </button>
+                    </div>
+                    
+                    <table style="background: #EBF8EC" id="table" data-show-columns="true" data-search="true" data-toolbar="#toolbar" data-show-toggle="true" data-pagination="true" data-height="525" data-striped="true" data-id-field="id" data-url="" data-checkbox-header="true" data-show-pagination-switch="true" data-page-list="[10, 25, 50, 100, all]">
+                    </table>
+                    <form action="/excel_upload" method="post" enctype="multipart/form-data">
+                        <input type="submit" title="批量上传" value="批量上传" class="btn btn-sm btn-write">
+                        <input type="file" title="浏览" name="excel_file"class="btn btn-sm btn-info">
+                        <a href="/static/download_file/payment.xlsx">下载模板</a>
+                    </form>
+                </div>
+     
+                
+
+            </section>
+            <a href="/logout" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="body"></a>
+        </section>
+        <!-- /.vbox -->
+    </section>
+    <div class="modal fade" id="addSingleRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-primary" id="myModalLabel">添加用户</h4>
+                </div>
+                <form id="add_room_form" action="/create_payment/" class="form-horizontal" role="form" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">缴费款项名称</label>
+                            <div class="col-sm-7">
+                                <input name="payment_class_name" class="form-control" id="focusedInput" type="text"  placeholder="请输入缴费款项...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">学生缴费时间</label>
+                            <div class="col-sm-7">
+                                <input name="stu_payment_time" class="form-control" id="focusedInput" type="text" placeholder="请输入学生缴费时间...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">缴费金额</label>
+                            <div class="col-sm-7">
+                                <input name="payment_amount" class="form-control" id="focusedInput" type="text" placeholder="请输入缴费金额...">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">学号</label>
+                            <div class="col-sm-7">
+                                <input name="stu_num_id" class="form-control" id="focusedInput" type="text" placeholder="请输入学号...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">付款状态</label>
+                                <div class="col-sm-7">
+                                    <input name="payment_status" class="form-control" id="focusedInput" type="text" placeholder="请输入付款状态...">
+                                </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建者ID</label>
+                            <div class="col-sm-7">
+                                <input name="create_user_id" class="form-control" id="focusedInput" type="text" placeholder="请输入创建者ID...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">付款返回备注</label>
+                            <div class="col-sm-7">
+                                <input name="payment_res_desc" class="form-control" id="focusedInput" type="text" placeholder="请输入付款返回备注...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-success">创建</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="deleteMultiRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-danger" id="myModalLabel">警告</h4>
+                </div>
+                <form id="delete_room_form" action="" class="form-horizontal" role="form" method="post">
+                    <div class="modal-body">
+                        <p>确认删除</p>
+                        <p class="text-left text-justify" id="deleteMultiRoomMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button type="button" id="deleteMultiRoomOk" class="btn btn-success">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteSingleRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-danger" id="myModalLabel">警告</h4>
+                </div>
+                <form id="delete_single_room_form" action="" class="form-horizontal" role="form" method="post">
+                    <div class="modal-body">
+                        <p>确认删除</p>
+                        <p class="text-left text-justify" id="deleteSingleRoomMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button type="button" id="deleteSingleRoomOk" class="btn btn-success">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap -->
+    <!-- Sparkline Chart -->
+    <!-- App -->
+    <script src="/static/chemira/js/manage_payment.js"></script>
+    <script type="text/javascript">
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+    </script>
+</body>
+
+</html>
