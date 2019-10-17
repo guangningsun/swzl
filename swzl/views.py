@@ -49,27 +49,6 @@ def _generate_json_from_models(response_list):
                         #content_type="application/x-www-form-urlencoded",
                         content_type='application/json',
                         )
-#                      content_type="application/json")
-#    res["Access-Control-Allow-Origin"] = "*"
-#    res["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE,OPTIONS"
-#    res["Access-Control-Max-Age"] = "1000"
-#    res["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-#   return res
-
-
-# 学生管理界面跳转
-# done
-def manage_student(request):
-    context = {}
-    return render(request, 'manage_student.html', context)
-
-
-# 缴费管理界面跳转
-# done
-def manage_payment(request):
-    context = {}
-    return render(request, 'manage_payment.html', context)
-
 
 # 用户管理界面跳转
 # done
@@ -80,27 +59,20 @@ def manage_user(request):
 
 # 缴费类别管理界面跳转
 # done
-def manage_p_class(request):
+def manage_lost(request):
     context = {}
-    return render(request, 'manage_payment_class.html', context)
+    return render(request, 'manage_lost.html', context)
 
 
-def manage_class(request):
+def manage_bus(request):
     context = {}
-    return render(request, 'manage_class.html', context)
+    return render(request, 'manage_bus.html', context)
 
 
-def manage_settings(request):
+def manage_type(request):
     context = {}
-    return render(request, '404.html', context)
+    return render(request, 'manage_type.html', context)
 
-def manage_report(request):
-    context = {}
-    return render(request, '404.html', context)
-
-def upload(request):
-    context = {}
-    return render(request, 'upload.html', context)
 
 # 创建缴费记录
 def create_payment(request):
@@ -282,53 +254,6 @@ def user_login(request):
 # 初始化登录界面
 def init_web(request):
     return render(request, 'signin.html')
-
-
-def audio_upload(request):
-    context = {}
-    current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    if request.method == 'POST':
-        try:
-            import pdb;pdb.set_trace()
-            # get file
-            audio_file = request.FILES.get('audio_file')
-            # init prepare data
-            prepare_data={'uid':'123', 'token':'123','lang': 'zh'}
-            prepare_req = requests.post('http://xz502.tpddns.cn:8210/v1/trans/api/prepare', data=prepare_data)
-            task_id=""
-            # linux 文件夹路径
-            bash_path = os.getcwd()
-            upload_file_path = bash_path+"/audio_file/"
-            file_name = os.path.join(upload_file_path, audio_file.name)
-            f = open(file_name, 'wb')
-            for chunk in audio_file.chunks():
-                f.write(chunk)
-            f.close()
-            if json.loads(prepare_req.text)['ok'] == 0:
-                task_id = json.loads(prepare_req.text)['data'].encode('utf-8')
-                #audio_data = { "task_id" : task_id , 'filename' : "@/"+file_name }
-                #upload_req = requests.post('http://xz502.tpddns.cn:8210/v1/trans/api/upload', data=audio_data)
-                #upload_req = os.system("curl -F \"task_id="+prepare_res_data+"\" -F \"filename=@/"+file_name+"\" http://xz502.tpddns.cn:8210/v1/trans/api/upload")
-                (status, output) = commands.getstatusoutput("curl -F \"task_id="+task_id+"\" -F \"filename=@/"+file_name+"\" http://xz502.tpddns.cn:8210/v1/trans/api/upload")
-                upload_status = output.split("ok")[1].replace("}", "").replace(":","").replace("\"","").replace("\'","")
-                ok_success = '0'
-                if str(upload_status) == ok_success:
-                    progress_data = {"task_id": task_id}
-                    progress_req = requests.post('http://xz502.tpddns.cn:8210/v1/trans/api/getProgress', data=progress_data)
-                    pd = json.loads(progress_req.text)['data'].encode('utf-8')
-                    progress_status = json.loads(pd)["status"]
-                    if progress_status == 3:
-                        result_data = {"task_id": task_id}
-                        result_req = requests.post('http://xz502.tpddns.cn:8210/v1/trans/api/getResult', data=result_data)
-                        #return HttpResponse(result_req.text, content_type='application/json',)
-                        res_data_list = ast.literal_eval(json.loads(result_req.text)["data"])
-                        context = {"req_data": res_data_list[0]["transcript"]}
-                        return render(request, 'upload.html', context)
-            else:
-                return "false"
-        except:
-            return HttpResponseRedirect('/upload')
-    return HttpResponseRedirect('/upload')
 
 
 # 找不到界面

@@ -19,17 +19,29 @@ class UserInfo(models.Model):
     class_id = models.CharField(max_length=200)
 
 
-# 学生类
-class StudentInfo(models.Model):
-    stu_id = models.CharField(max_length=200)
-    stu_num_id = models.CharField(max_length=200)
-    stu_name = models.CharField(max_length=200)
-    stu_id_card = models.CharField(max_length=200)
-    stu_sexy = models.CharField(max_length=200)
-    stu_phone_num = models.CharField(max_length=200)
-    stu_desc = models.CharField(max_length=200)
-    class_id = models.CharField(max_length=200)
+# 公交线路
+class BusLines(models.Model):
+    bus_line_id = models.CharField(max_length=20)
+    bus_line_name = models.CharField(max_length=200)
+
+# 失物类型
+class LostType(models.Model):
+    lost_type_id = models.CharField(max_length=200)
+    lost_type_name = models.CharField(max_length=200)
 
 
+class LostInfo(models.Model):
+    lost_id = models.CharField(max_length=200)
+    pick_up_time = models.CharField(max_length=200)
+    bus_line_name = models.CharField(max_length=200)
+    lost_type_name = models.CharField(max_length=200)
+    receive_address = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+    contact_number = models.CharField(max_length=200)
+    is_received = models.CharField(max_length=200)
+    received_name = models.CharField(max_length=200)
+    received_id_card = models.CharField(max_length=200)
+    received_phone_number = models.CharField(max_length=200)
+    received_desc = models.CharField(max_length=200)
 
 

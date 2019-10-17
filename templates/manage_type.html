@@ -12,9 +12,10 @@
     <!--[if lt IE 9]>
     <script src="js/ie/respond.min.js" cache="false"></script>
     <script src="js/ie/html5.js" cache="false"></script>
-    <script src="js/ie/fix.js" cache="false"></script> <![endif]-->
+    <script src="js/ie/fix.js" cache="false"></script> <![endif] validator.js-->
     <script src="/static/chemira/css/app.v1.js"></script>
     <script src="/static/chemira/js/bootstrap3-validation.js"></script>
+    <script src="/static/chemira/js/validator.js"></script>
     <script src="/static/chemira/js/tableExport.js"></script>
     <script src="/static/chemira/js/jquery.base64.js"></script>
     <script src="/static/chemira/js/bootstrap-table.js"></script>
@@ -35,7 +36,7 @@
         <aside class="bg-dark aside-sm" id="nav">
             <section class="vbox">
                 <header class="dker nav-bar">
-                    <a href="#" class="nav-brand" data-toggle="fullscreen" id="navi_domain">失物管理</a>
+                    <a href="#" class="nav-brand" data-toggle="fullscreen" id="navi_domain">失物招领</a>
                     <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
                         <i class="icon-comment-alt"></i>
                     </a>
@@ -74,7 +75,7 @@
                                             <span>用户管理</span>
                                         </a>
                                     </li>
-                                    <li class="active">
+                                    <li >
                                             <a href="/manage_lost">
                                                 <i class="icon-tasks"></i>
                                                 <span>失物管理</span>
@@ -86,7 +87,7 @@
                                                 <span>公交线路管理</span>
                                             </a>
                                         </li>
-                                        <li >
+                                        <li class="active">
                                             <a href="/manage_type">
                                                 <i class="icon-tasks"></i>
                                                 <span>失物类型管理</span>
@@ -109,92 +110,174 @@
         <section id="content">
             <section>
                 <header class="header bg-white b-b">
-                    <p>失物招领</p>
+                    <p>用户管理</p>
                 </header>
                 <div class="container">
                     <!-- <div class="panel" id="user_table"></div> -->
                     <div id="toolbar" class="pull-left col-">
                         <button id="remove" class="btn btn-danger">
-                            <i class="icon-remove"></i>删除记录
+                            <i class="icon-remove"></i>批量删用户
                         </button>
-                        <button id="addSingle" class="btn btn-success " data-toggle="modal" data-target="#addSingleRoom">
-                            <i class="icon-plus"></i>添加记录
+                        <button id="addSingle" class="btn btn-success " data-toggle="modal" data-target="#addSingleUser">
+                            <i class="icon-plus"></i>添加用户
                         </button>
                     </div>
-                    
                     <table style="background: #EBF8EC" id="table" data-show-columns="true" data-search="true" data-toolbar="#toolbar" data-show-toggle="true" data-pagination="true" data-height="525" data-striped="true" data-id-field="id" data-url="" data-checkbox-header="true" data-show-pagination-switch="true" data-page-list="[10, 25, 50, 100, all]">
                     </table>
                 </div>
-     
-                
-
             </section>
             <a href="/logout" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="body"></a>
         </section>
         <!-- /.vbox -->
     </section>
-    <div class="modal fade" id="addSingleRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="addSingleUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title text-primary" id="myModalLabel">添加用户</h4>
                 </div>
-                <form id="add_room_form" action="/create_payment/" class="form-horizontal" role="form" method="post">
+
+                <form id="add_user_form" action="/create_user/" class="form-horizontal" role="form" method="post" data-toggle="validator">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">缴费款项名称</label>
-                            <div class="col-sm-7">
-                                <input name="payment_class_name" class="form-control" id="focusedInput" type="text"  placeholder="请输入缴费款项...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">学生缴费时间</label>
-                            <div class="col-sm-7">
-                                <input name="stu_payment_time" class="form-control" id="focusedInput" type="text" placeholder="请输入学生缴费时间...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">缴费金额</label>
-                            <div class="col-sm-7">
-                                <input name="payment_amount" class="form-control" id="focusedInput" type="text" placeholder="请输入缴费金额...">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">学号</label>
-                            <div class="col-sm-7">
-                                <input name="stu_num_id" class="form-control" id="focusedInput" type="text" placeholder="请输入学号...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                                <label class="col-sm-3 control-label">付款状态</label>
-                                <div class="col-sm-7">
-                                    <input name="payment_status" class="form-control" id="focusedInput" type="text" placeholder="请输入付款状态...">
+                                <label class="col-sm-2 control-label">登录名</label>
+                                <div class="col-sm-8">
+                                    <input name="login_name" class="form-control" id="login_name" type="text" required  placeholder="请输入登录名..." data-error="用户名不能为空">
+                                    <div class="help-block with-errors"></div>
                                 </div>
-                            </div>
+                        </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">创建者ID</label>
-                            <div class="col-sm-7">
-                                <input name="create_user_id" class="form-control" id="focusedInput" type="text" placeholder="请输入创建者ID...">
+                            <label class="col-sm-2 control-label">用户名</label>
+                            <div class="col-sm-8">
+                                <input name="username" class="form-control" id="username" type="text" required  placeholder="请输入用户名...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">付款返回备注</label>
-                            <div class="col-sm-7">
-                                <input name="payment_res_desc" class="form-control" id="focusedInput" type="text" placeholder="请输入付款返回备注...">
+                            <label class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-8">
+                                <input name="password" class="form-control" id="password" type="password" required placeholder="请输入密码...">
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                            <label class="col-sm-2 control-label">权限</label>
+                            <div class="col-sm-8">
+                                <input name="user_permission" class="form-control" id="focusedInput" type="text" required placeholder="请输入权限...">
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">权限</label>
+                            <div class="radio-inline">
+                              <label>
+                                <input type="radio" name="user_permission" value="0" required>
+                                管理员
+                              </label>
+                            </div>
+                            <div class="radio-inline">
+                              <label>
+                                <input type="radio" name="user_permission" value="1" required>
+                                教师
+                              </label>
+                            </div>
+                          </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-8">
+                                <input name="description" class="form-control" id="description" type="text" required placeholder="请输入备注...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">班级号</label>
+                            <div class="col-sm-8">
+                                <input name="class_id" class="form-control" id="class_id" type="text" required placeholder="请输入班级号...">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-success">创建</button>
+                        <button type="submit" class="btn btn-success" >创建</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="modifySingleUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-primary" id="myModalLabel">修改用户</h4>
+                    </div>
     
+                    <form id="modify_user_form" action="/modify_user/" class="form-horizontal" role="form" method="post" data-toggle="validator">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                    <label class="col-sm-2 control-label">登录名</label>
+                                    <div class="col-sm-8">
+                                        <input name="login_name" id="m_login_name" class="form-control"  type="text" required  placeholder="请输入登录名..." data-error="用户名不能为空">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">用户名</label>
+                                <div class="col-sm-8">
+                                    <input name="username" id="m_username" class="form-control" type="text" required  placeholder="请输入用户名...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">密码</label>
+                                <div class="col-sm-8">
+                                    <input name="password" class="form-control" id="m_password" type="password" required placeholder="请输入密码...">
+                                </div>
+                            </div>
+                            <!--<div class="form-group">
+                                <label class="col-sm-2 control-label">权限</label>
+                                <div class="col-sm-8">
+                                    <input name="user_permission" class="form-control" id="focusedInput" type="text" required placeholder="请输入权限...">
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">权限</label>
+                                <div class="radio-inline">
+                                  <label>
+                                    <input type="radio" id="user_permission_admin" name="user_permission" value="0" required>
+                                    管理员
+                                  </label>
+                                </div>
+                                <div class="radio-inline">
+                                  <label>
+                                    <input type="radio" id="user_permission_teacher" name="user_permission" value="1" required>
+                                    教师
+                                  </label>
+                                </div>
+                              </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">描述</label>
+                                <div class="col-sm-8">
+                                    <input name="description" class="form-control" id="m_description" type="text" required placeholder="请输入备注...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">班级号</label>
+                                <div class="col-sm-8">
+                                    <input name="class_id" class="form-control" id="m_class_id" type="text" required placeholder="请输入班级号...">
+                                </div>
+                            </div>
+                        </div>
+                        <input name="is_deleted"  id="m_is_deleted"  type="hidden">
+                        <input name="create_time" id="m_create_time"  type="hidden">
+                        <input name="user_id"  id="m_user_id"  type="hidden">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                            <button type="submit" class="btn btn-success" >修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     <div class="modal fade" id="deleteMultiRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -238,7 +321,6 @@
     <!-- Bootstrap -->
     <!-- Sparkline Chart -->
     <!-- App -->
-    <script src="/static/chemira/js/manage_lost.js"></script>
+    <script src="/static/chemira/js/manage_type.js"></script>
 </body>
-
 </html>

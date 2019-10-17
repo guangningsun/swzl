@@ -29,14 +29,9 @@ urlpatterns = [
     url(r'^remove_user/', views.remove_user),
    
     url(r'^manage_user', views.manage_user),
-    url(r'^manage_payment', views.manage_payment),
-    url(r'^manage_student', views.manage_student),
-    url(r'^manage_p_class', views.manage_p_class),
-    url(r'^manage_class', views.manage_class),
-    url(r'^manage_report', views.manage_report),
-    url(r'^settings', views.manage_settings),
-    url(r'^audio_upload', views.audio_upload),
-    url(r'^upload', views.upload),
+    url(r'^manage_lost', views.manage_lost),
+    url(r'^manage_bus', views.manage_bus),
+    url(r'^manage_type', views.manage_type),
     
 
 ]
