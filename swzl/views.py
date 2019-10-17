@@ -113,29 +113,74 @@ def remove_payment(request):
         return _generate_json_message(True, "Remove payment Failed")
 
 
-def get_all_payment_info(request):
+def create_type(request):
+    context = {}
+    try:
+        if request.POST:
+            try:
+                LostType.objects.get(lost_type_name=request.POST['lost_type_name'])
+            except:
+                lost_type_info = LostType(
+                    lost_type_name=request.POST['lost_type_name'],
+                    lost_type_id = uuid.uuid1(),
+                    )
+                lost_type_info.save()
+        return HttpResponseRedirect('/manage_type')
+    except:
+        return HttpResponseRedirect('/manage_type')
+
+def remove_type(request):
+    context = {}
+    try:
+        lost_type_ids = request.POST['lost_type_ids']
+        for type_id in lost_type_ids.split(","):
+            lost_type_info = LostType.objects.get(lost_type_id=type_id)
+            lost_type_info.delete()
+        return _generate_json_message(True, "Remove Lost Type Success")
+    except:
+        return _generate_json_message(True, "Remove Lost Type Failed")
+
+def get_all_type(request):
     list_response = []
-    list_payment = PaymentInfo.objects.all()
-    for res in list_payment:
+    list_type = LostType.objects.all()
+    for res in list_type:
         dict_tmp = {}
         dict_tmp.update(res.__dict__)
         dict_tmp.pop("_state", None)
         list_response.append(dict_tmp)
     return _generate_json_from_models(list_response)
 
+def modify_type(request):
+    try:
+        if request.POST:
+            lost_type_info = LostType.objects.get(lost_type_id=request.POST['lost_type_id'])
+            lost_type_info.lost_type_name = request.POST['lost_type_name']
+            lost_type_info.save()
+        return HttpResponseRedirect('/manage_type')
+    except:
+        return HttpResponseRedirect('/manage_type')
 
-def modify_payment(request):
+def create_bus_line(request):
+    pass
+def remove_bus_line(request):
+    pass
+def get_all_bus_line(request):
+    pass
+def get_bus_line_by_name(request):
+    pass
+def modify_bug_line(request):
     pass
 
-
-def get_payment_list_by_stu_id_card(request):
+def create_lost(request):
     pass
-
-
-
-
-
-
+def remove_lost(request):
+    pass
+def get_all_lost(request):
+    pass
+def get_lost_by_bus_line(request):
+    pass
+def modify_lost(request):
+    pass
 
 # 创建用户信息/用户注册
 # success

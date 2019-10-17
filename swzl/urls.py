@@ -32,6 +32,24 @@ urlpatterns = [
     url(r'^manage_lost', views.manage_lost),
     url(r'^manage_bus', views.manage_bus),
     url(r'^manage_type', views.manage_type),
+
+    url(r'^get_all_type', views.get_all_type),
+    url(r'^create_type', views.create_type),
+    url(r'^remove_type', views.remove_type),
+    url(r'^modify_type', views.modify_type),
+
+    url(r'^create_bus_line', views.create_bus_line),
+    url(r'^remove_bus_line', views.remove_bus_line),
+    url(r'^get_all_bus_line', views.get_all_bus_line),
+    url(r'^get_bus_line_by_name', views.get_bus_line_by_name),
+    url(r'^modify_bug_line', views.modify_bug_line),
+
+    url(r'^create_lost', views.create_lost),
+    url(r'^remove_lost', views.remove_bus_line),
+    url(r'^get_all_lost', views.get_all_lost),
+    url(r'^get_lost_by_bus_line', views.get_lost_by_bus_line),
+    url(r'^modify_lost', views.modify_lost),
+    
     
 
 ]

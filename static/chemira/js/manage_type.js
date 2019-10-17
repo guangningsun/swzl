@@ -64,14 +64,15 @@ $(document).ready(function() {
 
 
     function getApartNameSelections() {
+        console.log("-----------")
         return $.map($table.bootstrapTable('getSelections'), function(row) {
-            return row.payment_class_name;
+            return row.lost_type_name;
         });
     }
 
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function(row) {
-            return row.payment_class_id;
+            return row.lost_type_id;
         });
     }
 
@@ -80,62 +81,58 @@ $(document).ready(function() {
         el: '#btn_show_pass'
     });
 
-     window.operateEvents = {
-
+    window.operateEvents = {
         'click .modify': function(e, value, row, index) {
-            var obj = row;
-            console.log(obj);
-       
-            var payment_class_id = obj.payment_class_id;
-            var payment_class_name = obj.payment_class_name;
-            var payment_class_desc = obj.payment_class_desc;
-
-            $('#m_payment_class_id')[0].value = payment_class_id;
-            $('#m_payment_class_name')[0].value = payment_class_name;
-            $('#m_payment_class_desc')[0].value = payment_class_desc;
-            $('#modifySinglePaymentClass').modal();
+            console.log(row)
+            var stu_obj = row;
+            var lost_type_id = stu_obj.lost_type_id;
+            var lost_type_name = stu_obj.lost_type_name;
+            console.log(stu_obj.lost_type_name)
+            $('#m_lost_type_id')[0].value = lost_type_id;
+            $('#m_lost_type_name')[0].value = lost_type_name;
+            $('#modifySingleUser').modal();
         },
         'click .remove': function(e, value, row, index) {
-            $('#deleteSingleRoom').modal();
-            //$('#deleteSingleRoomMsg').html(row.payment_class_name + ' ?');
-            $('#deleteSingleRoomOk').click(function() {
+            // $('#deleteSingleRoom').modal();
+            // $('#deleteSingleRoomMsg').html(row.lost_type_name + ' ?');
+            // $('#deleteSingleRoomOk').click(function() {
                 $.ajax({
-                    url: "/remove_p_class/",
+                    url: "/remove_type/",
                     dataType: "json",
-                    data: { "payment_class_ids": row.payment_class_id },
+                    data: { "lost_type_ids": row.lost_type_id },
                     type: "POST",
                     success: function(msg) {
-                        $table.bootstrapTable('remove', {
-                            field: 'payment_class_id',
-                            values: [row.payment_class_id]
-                        });
-                        $('#deleteSingleRoom').modal('hide'); 
+                            $table.bootstrapTable('remove', {
+                                field: 'lost_type_id',
+                                values: [row.lost_type_id]
+                            });
+                            $('#deleteSingleRoom').modal('hide');    
                     }
                 });
-            });
+            // });
         }
     };
 
     $remove.click(function() {
         var ids = getIdSelections();
         if (ids.length > 0) {
-            $('#deleteMultiRoom').modal();
+            //$('#deleteMultiRoom').modal();
             ids_str = ids.toString().trim();
-            var payment_class_name = getApartNameSelections().toString().trim();
-            $('#deleteMultiRoomMsg').html(ids_str+ '?'+ payment_class_name);
-            $('#deleteMultiRoomOk').click(function() {
+            var stu_name = getApartNameSelections().toString().trim();
+            //$('#deleteMultiRoomMsg').html( ' ?');
+            //$('#deleteMultiRoomOk').click(function() {
                 $.ajax({
-                    url: "/remove_p_class/",
+                    url: "/remove_type/",
                     dataType: "json",
-                    data: { payment_class_ids: ids_str },
+                    data: { lost_type_ids: ids_str },
                     type: "POST",
                     success: function(msg) {
                         window.location.reload();
                     }
                 });
                 $remove.prop('disabled', false);
-                $('#deleteMultiRoom').modal('hide');
-            });
+                //$('#deleteMultiRoom').modal('hide');
+            //});
 
         }
 
@@ -150,7 +147,7 @@ $(document).ready(function() {
     function responseHandler(res) {
         console.log(res);
         $.each(res.rows, function(i, row) {
-            row.state = $.inArray(row.id, selections) !== -1;
+            row.state = $.inArray(row.stu_id, selections) !== -1;
         });
         return res;
     }
@@ -163,22 +160,15 @@ $(document).ready(function() {
         checkbox: true
     });
     columns.push({
-        field: 'payment_class_id',
-        title: '缴费类别ID',
+        field: 'lost_type_id',
+        title: '失物类型ID',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'payment_class_name',
-        title: '缴费项目名称',
-        align: 'center',
-        valign: 'middle',
-        sortable: true
-    });
-    columns.push({
-        field: 'payment_class_desc',
-        title: '缴费类别备注',
+        field: 'lost_type_name',
+        title: '失物类型名称',
         align: 'center',
         valign: 'middle',
         sortable: true
@@ -201,7 +191,7 @@ $(document).ready(function() {
 
     $.ajax({
         type: "GET",
-        url: '/get_all_p_class_info',
+        url: '/get_all_type',
         success: function(data) {
             var allRoomDataObjs = eval(data);
             $('#table').bootstrapTable('destroy').bootstrapTable({
