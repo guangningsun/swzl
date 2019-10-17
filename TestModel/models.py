@@ -31,30 +31,5 @@ class StudentInfo(models.Model):
     class_id = models.CharField(max_length=200)
 
 
-# 班级类
-class ClassInfo(models.Model):
-    class_id = models.CharField(max_length=200)
-    class_num = models.CharField(max_length=200)
-
-
-# 缴费信息类
-class PaymentInfo(models.Model):
-    payment_id = models.CharField(max_length=200)
-    payment_class_name = models.CharField(max_length=200)
-    payment_create_time = models.CharField(max_length=200)
-    stu_payment_time = models.CharField(max_length=200)
-    payment_amount = models.CharField(max_length=200)
-    payment_status = models.CharField(max_length=200)
-    stu_num_id = models.CharField(max_length=200)
-    create_user_id = models.CharField(max_length=200)
-    payment_res_desc = models.CharField(max_length=200)
-    merOrderId = models.CharField(max_length=200,default='None')
-
-
-# 缴费项目类
-class PaymentClassInfo(models.Model):
-    payment_class_id = models.CharField(max_length=200)
-    payment_class_name = models.CharField(max_length=200)
-    payment_class_desc = models.CharField(max_length=200)
 
 
