@@ -66,13 +66,13 @@ $(document).ready(function() {
 
     function getApartNameSelections() {
         return $.map($table.bootstrapTable('getSelections'), function(row) {
-            return row.class_num;
+            return row.bus_line_name;
         });
     }
 
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function(row) {
-            return row.class_id;
+            return row.bus_line_id;
         });
     }
 
@@ -85,29 +85,26 @@ $(document).ready(function() {
         'click .modify': function(e, value, row, index) {
             var obj = row;
             console.log(obj);
-       
-            var class_id = obj.class_id;
-            var class_num = obj.class_num;
+            var bus_line_id = obj.bus_line_id;
+            var bus_line_name = obj.bus_line_name;
 
-            $('#m_class_id')[0].value = class_id;
-            $('#m_class_num')[0].value = class_num;
-            $('#modifySingleClass').modal();
+            $('#m_bus_line_id')[0].value = bus_line_id;
+            $('#m_bus_line_name')[0].value = bus_line_name;
+            $('#modifySingleBus').modal();
         },
         'click .remove': function(e, value, row, index) {
-            console.log(row.user_ids);
-
             $('#deleteSingleRoom').modal();
-            $('#deleteSingleRoomMsg').html(row.class_num + ' ?');
+            $('#deleteSingleRoomMsg').html(row.bus_line_name + ' ?');
             $('#deleteSingleRoomOk').click(function() {
                 $.ajax({
-                    url: "/remove_class/",
+                    url: "/remove_bus_line/",
                     dataType: "json",
-                    data: { "class_ids": row.class_id },
+                    data: { "bus_line_ids": row.bus_line_id },
                     type: "POST",
                     success: function(msg) {
                             $table.bootstrapTable('remove', {
-                                field: 'class_id',
-                                values: [row.class_id]
+                                field: 'bus_line_id',
+                                values: [row.bus_line_id]
                             });
                             $('#deleteSingleRoom').modal('hide');
                         }
@@ -125,12 +122,12 @@ $(document).ready(function() {
             $('#deleteMultiRoom').modal();
             ids_str = ids.toString().trim();
             var class_num = getApartNameSelections().toString().trim();
-            $('#deleteMultiRoomMsg').html(class_num + ' ?'+ ids_str);
+            $('#deleteMultiRoomMsg').html(class_num + ' ?');
             $('#deleteMultiRoomOk').click(function() {
                 $.ajax({
-                    url: "/remove_class/",
+                    url: "/remove_bus_line/",
                     dataType: "json",
-                    data: { class_ids: ids_str },
+                    data: { bus_line_ids: ids_str },
                     type: "POST",
                     success: function(msg) {
                         window.location.reload();
@@ -166,15 +163,15 @@ $(document).ready(function() {
         checkbox: true
     });
     columns.push({
-        field: 'class_id',
-        title: '班级ID',
+        field: 'bus_line_id',
+        title: '线路ID',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'class_num',
-        title: '班级号',
+        field: 'bus_line_name',
+        title: '线路名',
         align: 'center',
         valign: 'middle',
         sortable: true
@@ -197,7 +194,7 @@ $(document).ready(function() {
 
     $.ajax({
         type: "GET",
-        url: '/get_all_class_info',
+        url: '/get_all_bus_line',
         success: function(data) {
             var allRoomDataObjs = eval(data);
             console.log(allRoomDataObjs);

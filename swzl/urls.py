@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^remove_bus_line', views.remove_bus_line),
     url(r'^get_all_bus_line', views.get_all_bus_line),
     url(r'^get_bus_line_by_name', views.get_bus_line_by_name),
-    url(r'^modify_bug_line', views.modify_bug_line),
+    url(r'^modify_bus_line', views.modify_bus_line),
 
     url(r'^create_lost', views.create_lost),
     url(r'^remove_lost', views.remove_bus_line),

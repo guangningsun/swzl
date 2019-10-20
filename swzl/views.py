@@ -150,6 +150,7 @@ def get_all_type(request):
         list_response.append(dict_tmp)
     return _generate_json_from_models(list_response)
 
+
 def modify_type(request):
     try:
         if request.POST:
@@ -160,16 +161,62 @@ def modify_type(request):
     except:
         return HttpResponseRedirect('/manage_type')
 
+# bus line 
 def create_bus_line(request):
-    pass
+     context = {}
+     try:
+         if request.POST:
+             try:
+                 BusLines.objects.get(bus_line_name=request.POST['bus_line_name'])
+             except:
+                 bus_line_info = BusLines(
+                     bus_line_name=request.POST['bus_line_name'],
+                     bus_line_id = uuid.uuid1(),
+                     )
+                 bus_line_info.save()
+         return HttpResponseRedirect('/manage_bus')
+     except:
+         return HttpResponseRedirect('/manage_bug')
+
+        
 def remove_bus_line(request):
-    pass
+    context = {}
+    try:
+        bus_line_ids = request.POST['bus_line_ids']
+        for bus_line_id in bus_line_ids.split(","):
+            bus_line_info = BusLines.objects.get(bus_line_id=bus_line_id)
+            bus_line_info.delete()
+        return _generate_json_message(True, "Remove Bus Line Success")
+    except:
+        return _generate_json_message(True, "Remove Bus Line Failed")
+
+
 def get_all_bus_line(request):
-    pass
+    list_response = []
+    list_bus_line = BusLines.objects.all()
+    for res in list_bus_line:
+        dict_tmp = {}
+        dict_tmp.update(res.__dict__)
+        dict_tmp.pop("_state", None)
+        list_response.append(dict_tmp)
+    return _generate_json_from_models(list_response)
+
+
 def get_bus_line_by_name(request):
     pass
-def modify_bug_line(request):
-    pass
+
+
+def modify_bus_line(request):
+    try:
+        if request.POST:
+            bus_line_info = BusLines.objects.get(bus_line_id=request.POST['m_bus_line_id'])
+            bus_line_info.bus_line_name = request.POST['m_bus_line_name']
+            bus_line_info.bus_line_id = request.POST['m_bus_line_id']
+            bus_line_info.save()
+        return HttpResponseRedirect('/manage_bus')
+    except:
+        return HttpResponseRedirect('/manage_bus')
+
 
 def create_lost(request):
     pass
