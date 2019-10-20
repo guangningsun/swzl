@@ -219,15 +219,83 @@ def modify_bus_line(request):
 
 
 def create_lost(request):
-    pass
+    current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    context = {}
+    #import pdb;pdb.set_trace()
+    try:
+        if request.POST:
+            try:
+                LostInfo.objects.get(login_name=request.POST['login_name'])
+            except:
+                lost_info = LostInfo(
+                    pick_up_time=request.POST['pick_up_time'],
+                    bus_line_name=request.POST['bus_line_name'],
+                    lost_type_name=request.POST['lost_type_name'],
+                    lost_id=_get_timestamp(),
+                    receive_address=request.POST['receive_address'],
+                    is_received=0,
+                    description=request.POST['description'],
+                    received_name=request.POST['received_name'],
+                    received_id_card=request.POST['received_id_card'],
+                    received_phone_number=request.POST['received_phone_number'],
+                    received_desc=request.POST['received_desc'],
+                    contact_number=request.POST['contact_number']
+                    )
+                lost_info.save()
+        # return render(request, 'manage_user.html', context)
+        return HttpResponseRedirect('/manage_lost')
+    except:
+        return HttpResponseRedirect('/manage_lost')
+
 def remove_lost(request):
-    pass
+    context = {}
+    try:
+        lost_ids = request.POST['lost_ids']
+        #import pdb;pdb.set_trace()
+        for lost_id in lost_ids.split(","):
+            lost_info = LostInfo.objects.get(lost_id=lost_id)
+            lost_info.delete()
+        return _generate_json_message(True, "Remove Lost Success")
+    except:
+        return _generate_json_message(True, "Remove Lost Failed")
+
+
+
 def get_all_lost(request):
-    pass
+    list_response = []
+    list_lost = LostInfo.objects.all()
+    for res in list_lost:
+        dict_tmp = {}
+        dict_tmp.update(res.__dict__)
+        dict_tmp.pop("_state", None)
+        list_response.append(dict_tmp)
+    return _generate_json_from_models(list_response)
+
+
 def get_lost_by_bus_line(request):
     pass
+
+
 def modify_lost(request):
-    pass
+    try:
+        if request.POST:
+            lost_info = LostInfo.objects.get(lost_id=request.POST['m_lost_id'])
+            lost_info.pick_up_time = request.POST['m_pick_up_time']
+            lost_info.bus_line_name = request.POST['m_bus_line_name']
+            lost_info.lost_type_name = request.POST['m_lost_type_name']
+            lost_info.receive_address = request.POST['m_receive_address']
+            lost_info.is_received = request.POST['m_is_received']
+            lost_info.description = request.POST['m_description']
+            lost_info.received_name = request.POST['m_received_name']
+            lost_info.received_id_card = request.POST['m_received_id_card']
+            lost_info.received_phone_number = request.POST['m_received_phone_number']
+            lost_info.received_desc = request.POST['m_received_desc']
+            lost_info.contact_number = request.POST['m_contact_number']
+            lost_info.save()
+        return HttpResponseRedirect('/manage_lost')
+    except:
+        return HttpResponseRedirect('/manage_lost')
+
 
 # 创建用户信息/用户注册
 # success

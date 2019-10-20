@@ -65,13 +65,13 @@ $(document).ready(function() {
 
     function getApartNameSelections() {
         return $.map($table.bootstrapTable('getSelections'), function(row) {
-            return row.stu_name;
+            return row.lost_id;
         });
     }
 
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function(row) {
-            return row.stu_id;
+            return row.lost_id;
         });
     }
 
@@ -84,46 +84,48 @@ $(document).ready(function() {
         'click .modify': function(e, value, row, index) {
             var stu_obj = row;
             console.log(stu_obj);
-       
-            var class_id = stu_obj.class_id;
-            var stu_desc = stu_obj.stu_desc;
-            var stu_id = stu_obj.stu_id;
-            var stu_id_card= stu_obj.stu_id_card;
-            var stu_name = stu_obj.stu_name;
-            var stu_num_id = stu_obj.stu_num_id;
-            var stu_phone_num = stu_obj.stu_phone_num;
-            var stu_sexy = stu_obj.stu_sexy;
-            $('#m_class_id')[0].value = class_id;
-            $('#m_stu_desc')[0].value = stu_desc;
-            $('#m_stu_id')[0].value = stu_id;
-            $('#m_stu_id_card')[0].value = stu_id_card;
-            $('#m_stu_name')[0].value = stu_name;
-            $('#m_stu_num_id')[0].value = stu_num_id;
-            $('#m_stu_phone_num')[0].value = stu_phone_num;
+            var lost_id = stu_obj.lost_id;
+            var pick_up_time = stu_obj.pick_up_time;
+            var bus_line_name = stu_obj.bus_line_name;
+            var lost_type_name= stu_obj.lost_type_name;
+            var receive_address = stu_obj.receive_address;
+            var is_received = stu_obj.is_received;
+            var description = stu_obj.description;
+            var received_name = stu_obj.received_name;
+            var received_id_card = stu_obj.received_id_card;
+            var received_phone_number = stu_obj.received_phone_number;
+            var received_desc = stu_obj.received_desc;
+            var contact_number = stu_obj.contact_number;
 
-            delete $('#m_stu_sexy_boy').checked;
-            delete $('#m_stu_sexy_girl').checked;
-            if (stu_sexy === '男'){
-                $('#m_stu_sexy_boy').attr("checked", "checked");
-            } else {
-                $('#m_stu_sexy_girl').attr("checked", "checked");
-            }
-            $('#modifySingleStudent').modal();
+            $('#m_lost_id')[0].value = lost_id;
+            $('#m_pick_up_time')[0].value = pick_up_time;
+            $('#m_bus_line_name')[0].value = bus_line_name;
+            $('#m_lost_type_name')[0].value = lost_type_name;
+            $('#m_receive_address')[0].value = receive_address;
+            $('#m_is_received')[0].value = is_received;
+            $('#m_description')[0].value = description;
+            $('#m_received_name')[0].value = received_name;
+            $('#m_received_id_card')[0].value = received_id_card;
+            $('#m_received_phone_number')[0].value = received_phone_number;
+            $('#m_received_desc')[0].value = received_desc;
+            $('#m_contact_number')[0].value = contact_number;
+
+            $('#modifySingleLost').modal();
         },
         'click .remove': function(e, value, row, index) {
-            console.log(row.stu_num_id);
+            console.log(row.lost_id);
             $('#deleteSingleRoom').modal();
-            $('#deleteSingleRoomMsg').html(row.stu_name + ' ?');
+            $('#deleteSingleRoomMsg').html(row.lost_id + ' ?');
             $('#deleteSingleRoomOk').click(function() {
                 $.ajax({
-                    url: "/remove_student/",
+                    url: "/remove_lost/",
                     dataType: "json",
-                    data: { "stu_num_ids": row.stu_num_id },
+                    data: { "lost_ids": row.lost_id },
                     type: "POST",
                     success: function(msg) {
                             $table.bootstrapTable('remove', {
-                                field: 'stu_num_id',
-                                values: [row.stu_num_id]
+                                field: 'lost_id',
+                                values: [row.lost_id]
                             });
                             $('#deleteSingleRoom').modal('hide');    
                     }
@@ -140,13 +142,13 @@ $(document).ready(function() {
         if (ids.length > 0) {
             $('#deleteMultiRoom').modal();
             ids_str = ids.toString().trim();
-            var stu_name = getApartNameSelections().toString().trim();
-            $('#deleteMultiRoomMsg').html(stu_name + ' ?'+ ids_str);
+            var lost_id = getApartNameSelections().toString().trim();
+            $('#deleteMultiRoomMsg').html(lost_id + ' ?');
             $('#deleteMultiRoomOk').click(function() {
                 $.ajax({
-                    url: "/remove_student/",
+                    url: "/remove_lost/",
                     dataType: "json",
-                    data: { stu_num_ids: ids_str },
+                    data: { lost_ids: ids_str },
                     type: "POST",
                     success: function(msg) {
                         window.location.reload();
@@ -174,7 +176,6 @@ $(document).ready(function() {
         return res;
     }
 
-
     var columns = [];
 
     columns.push({
@@ -182,57 +183,85 @@ $(document).ready(function() {
         checkbox: true
     });
     columns.push({
-        field: 'stu_id',
-        title: '学生ID',
+        field: 'lost_id',
+        title: '失物ID',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'stu_num_id',
-        title: '学号',
+        field: 'pick_up_time',
+        title: '拾取时间',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'stu_name',
-        title: '用户名',
+        field: 'bus_line_name',
+        title: '公交线路',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'stu_id_card',
-        title: '身份证号',
+        field: 'lost_type_name',
+        title: '失物类型',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'stu_sexy',
-        title: '性别',
+        field: 'receive_address',
+        title: '领取地址',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'stu_phone_num',
-        title: '手机号',
+        field: 'description',
+        title: '失物特征描述',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'stu_desc',
-        title: '备注',
+        field: 'contact_number',
+        title: '联系电话',
         align: 'center',
         valign: 'middle',
         sortable: true
     });
     columns.push({
-        field: 'class_id',
-        title: '班级号',
+        field: 'is_received',
+        title: '是否已领取',
+        align: 'center',
+        valign: 'middle',
+        sortable: true
+    });
+    columns.push({
+        field: 'received_name',
+        title: '领取者姓名',
+        align: 'center',
+        valign: 'middle',
+        sortable: true
+    });
+    columns.push({
+        field: 'received_id_card',
+        title: '领取者身份证',
+        align: 'center',
+        valign: 'middle',
+        sortable: true
+    });
+    columns.push({
+        field: 'received_phone_number',
+        title: '领取者电话号',
+        align: 'center',
+        valign: 'middle',
+        sortable: true
+    });
+    columns.push({
+        field: 'is_received',
+        title: '是否已领取',
         align: 'center',
         valign: 'middle',
         sortable: true
@@ -255,7 +284,7 @@ $(document).ready(function() {
 
     $.ajax({
         type: "GET",
-        url: '/get_all_student_info',
+        url: '/get_all_lost',
         success: function(data) {
             var allRoomDataObjs = eval(data);
             $('#table').bootstrapTable('destroy').bootstrapTable({
