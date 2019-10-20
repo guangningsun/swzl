@@ -176,7 +176,7 @@ def create_bus_line(request):
                  bus_line_info.save()
          return HttpResponseRedirect('/manage_bus')
      except:
-         return HttpResponseRedirect('/manage_bug')
+         return HttpResponseRedirect('/manage_bus')
 
         
 def remove_bus_line(request):
@@ -227,6 +227,14 @@ def create_lost(request):
             try:
                 LostInfo.objects.get(login_name=request.POST['login_name'])
             except:
+                image_file = request.FILES.get('image_file')
+                base_path = os.getcwd()
+                upload_file_path = base_path+"/image_file/"
+                file_name = os.path.join(upload_file_path, uuid.uuid1())
+                f = open(file_name, 'wb')
+                for chunk in image_file.chunks():
+                    f.write(chunk)
+                f.close()
                 lost_info = LostInfo(
                     pick_up_time=request.POST['pick_up_time'],
                     bus_line_name=request.POST['bus_line_name'],
@@ -239,13 +247,15 @@ def create_lost(request):
                     received_id_card=request.POST['received_id_card'],
                     received_phone_number=request.POST['received_phone_number'],
                     received_desc=request.POST['received_desc'],
-                    contact_number=request.POST['contact_number']
+                    contact_number=request.POST['contact_number'],
+                    image_path = file_name
                     )
                 lost_info.save()
         # return render(request, 'manage_user.html', context)
         return HttpResponseRedirect('/manage_lost')
     except:
         return HttpResponseRedirect('/manage_lost')
+
 
 def remove_lost(request):
     context = {}
@@ -419,4 +429,6 @@ def init_web(request):
 # 找不到界面
 def page_not_found(request, exception):
     return render(request, '404.html', status=404)
+
+
 

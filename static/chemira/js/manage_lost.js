@@ -267,6 +267,13 @@ $(document).ready(function() {
         sortable: true
     });
     columns.push({
+        field: 'image_path',
+        title: '图片地址',
+        align: 'center',
+        valign: 'middle',
+        sortable: true
+    });
+    columns.push({
         field: 'operate',
         title: '操作',
         align: 'center',
