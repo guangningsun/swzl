@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/static/chemira/css/room_manager.css">
     <link rel="stylesheet" href="/static/chemira/css/bootstrap-table.min.css">
     <link rel="stylesheet" href="/static/chemira/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-select.min.css">
+
     <!--[if lt IE 9]>
     <script src="js/ie/respond.min.js" cache="false"></script>
     <script src="js/ie/html5.js" cache="false"></script>
@@ -20,6 +22,7 @@
     <script src="/static/chemira/js/bootstrap-table.js"></script>
     <script src="/static/chemira/js/bootstrap-table-export.js"></script>
     <script src="/static/chemira/js/bootstrap-table-zh-CN.js"></script>
+    <script src="/static/chemira/js/bootstrap-select.min.js"></script>
     <script>
     $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN']);
     </script>
@@ -141,27 +144,29 @@
                     <h4 class="modal-title text-primary" id="myModalLabel">添加失物记录</h4>
                 </div>
                 <form id="add_room_form" action="/create_lost/" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label class="col-sm-3 control-label">图片</label>
                             <input type="file" name="image_file" title="选择图片" class="btn btn-sm btn-info m-b-sm"><br>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">失物拾取时间</label>
-                            <div class="col-sm-7">
-                                <input name="pick_up_time" class="form-control" id="pick_up_time" type="text"  placeholder="请输入拾取失物时间...">
+                        </div> -->
+                        <div class="form-group row modalPanel" >
+                            <label for="pick_up_time" class="col-md-3 control-label">失物拾取时间</label>
+                            <div class="input-group date form_date col-md-7" data-date="" data-date-format="yyyy-mm-dd" data-link-field="pick_up_time" data-link-format="yyyy-mm-dd">
+                                <input id="pick_up_time" name="pick_up_time" class="form-control" size="16" type="text" value=""  check-type="required" required-message="请选择周期">
+                                <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">公交线路名称</label>
-                            <div class="col-sm-7">
-                                <input name="bus_line_name" class="form-control" id="bus_line_name" type="text" placeholder="请输入公交线路名称...">
-                            </div>
+                           <!--multiple-->
+                            <select id="bus_line_name" name="bus_line_name" class="bus_line_name  col-sm-7"  type="text"  data-live-search="true" >
+                            </select> 
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">失物类型</label>
-                            <div class="col-sm-7">
-                                <input name="lost_type_name" class="form-control" id="lost_type_name" type="text" placeholder="请输入失物类型...">
-                            </div>
+                            <select id="lost_type_name" name="lost_type_name" class="lost_type_name  col-sm-7"  type="text"  data-live-search="true" >
+                            </select>
                         </div>
                         
                         <div class="form-group">
@@ -175,7 +180,7 @@
                                 <div class="col-sm-7">
                                     <input name="description" class="form-control" id="description" type="text" placeholder="请输入失物特征...">
                                 </div>
-                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">联系电话</label>
                             <div class="col-sm-7">
@@ -184,8 +189,16 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">是否已领取</label>
-                            <div class="col-sm-7">
+                            <!--<div class="col-sm-7">
                                 <input name="is_received" class="form-control" id="is_received" type="text" placeholder="请输入是否已领取...">
+                            </div> -->
+                            <div class="col-sm-7">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_received" id="optionsRadios1" value="0" checked> 未领取
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_received" id="optionsRadios2"  value="1">  已领取
+                            </label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -193,7 +206,7 @@
                                 <div class="col-sm-7">
                                     <input name="received_name" class="form-control" id="received_name" type="text" placeholder="请输入领取人姓名...">
                                 </div>
-                            </div>
+                        </div>
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">领取人身份证</label>
                                     <div class="col-sm-7">
@@ -212,7 +225,7 @@
                                     <input name="received_desc" class="form-control" id="received_desc" type="text" placeholder="请输入领取人描述...">
                                 </div>
                         </div>
-                    </div>
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
                         <button type="submit" class="btn btn-success">创建</button>
@@ -221,6 +234,9 @@
             </div>
         </div>
     </div>
+
+
+
     <!-- modify-->
     <div class="modal fade" id="modifySingleLost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -239,9 +255,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">公交线路名称</label>
-                                    <div class="col-sm-7">
+                                    <!--<div class="col-sm-7">
                                         <input name="m_bus_line_name" class="form-control" id="m_bus_line_name" type="text" placeholder="请输入公交线路名称...">
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">失物类型</label>
@@ -353,6 +369,89 @@
     <!-- Sparkline Chart -->
     <!-- App -->
     <script src="/static/chemira/js/manage_lost.js"></script>
+    <script type="text/javascript">
+        $('.form_date').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(".bus_line_name").selectpicker({
+                noneSelectedText : '请选择公交线路'
+            });
+            loadbusdata();
+            $(window).on('load', function() {
+                $('.bus_line_name').selectpicker('refresh');
+            });
+     
+        });
+        
+        function loadbusdata(){
+           $.ajax({
+                url : "/get_all_bus_line",
+                type : 'GET',
+                async : false,
+                datatype : 'json',
+                success : function(data) {
+                    console.log(data)
+                    if(data){
+                        var parknames =[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            var parkdata = data[i];
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.bus_line_name+'">'+parkdata.bus_line_name+'</option>') 
+                       }
+                        $("#bus_line_name").html(parknames.join(' '));
+                    }
+                },
+                error : function() {
+                    alert('查询公交线路名称出错');
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(".lost_type_name").selectpicker({
+                noneSelectedText : '请选择失物类型'
+            });
+            loadParkdata(); 
+            $(window).on('load', function() {
+                $('.lost_type_name').selectpicker('refresh');
+            });
+     
+        });
+        
+        function loadParkdata(){
+           $.ajax({
+                url : "/get_all_type",
+                type : 'GET',
+                async : false,
+                datatype : 'json',
+                success : function(data) {
+                    console.log(data)
+                    if(data){
+                        var parknames =[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            var parkdata = data[i];
+　　　　　　　　　　　　　　　　　//拼接成多个<option><option/>
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.lost_type_name+'">'+parkdata.lost_type_name+'</option>') 
+                       }
+                        $("#lost_type_name").html(parknames.join(' '));
+                    }
+                },
+                error : function() {
+                    alert('查询失物类型出错');
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
