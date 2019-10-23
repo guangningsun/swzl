@@ -267,7 +267,7 @@ $(document).ready(function() {
         sortable: true
     });
     columns.push({
-        field: 'image_path',
+        field: 'image_obj',
         title: '图片地址',
         align: 'center',
         valign: 'middle',

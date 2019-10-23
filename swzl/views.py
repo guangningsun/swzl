@@ -235,6 +235,7 @@ def create_lost(request):
                 #for chunk in image_file.chunks():
                 #    f.write(chunk)
                 #f.close()
+
                 lost_info = LostInfo(
                     pick_up_time=request.POST['pick_up_time'],
                     bus_line_name=request.POST['bus_line_name'],
@@ -249,7 +250,8 @@ def create_lost(request):
                     received_desc=request.POST['received_desc'],
                     contact_number=request.POST['contact_number'],
                     #image_path = file_name
-                    image_path = ""
+                    image_path = "",
+                    image_obj = request.FILES.get('image_file')
                     )
                 lost_info.save()
         # return render(request, 'manage_user.html', context)

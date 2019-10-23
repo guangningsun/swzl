@@ -44,5 +44,6 @@ class LostInfo(models.Model):
     received_phone_number = models.CharField(max_length=200)
     received_desc = models.CharField(max_length=200)
     image_path = models.CharField(max_length=200)
+    image_obj = models.ImageField(upload_to='image_file')
 
 

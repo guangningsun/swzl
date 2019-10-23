@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from swzl import views
+from swzl import views, settings
 from django.conf.urls import include, url
+from django.views.static import serve
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -50,7 +51,7 @@ urlpatterns = [
     url(r'^get_lost_by_bus_line', views.get_lost_by_bus_line),
     url(r'^modify_lost', views.modify_lost),
     
-    
+    url(r'^image_file/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 
 ]
 

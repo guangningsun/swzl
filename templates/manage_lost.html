@@ -144,10 +144,7 @@
                     <h4 class="modal-title text-primary" id="myModalLabel">添加失物记录</h4>
                 </div>
                 <form id="add_room_form" action="/create_lost/" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >
-                        <!--<div class="form-group">
-                            <label class="col-sm-3 control-label">图片</label>
-                            <input type="file" name="image_file" title="选择图片" class="btn btn-sm btn-info m-b-sm"><br>
-                        </div> -->
+                        
                         <div class="form-group row modalPanel" >
                             <label for="pick_up_time" class="col-md-3 control-label">失物拾取时间</label>
                             <div class="input-group date form_date col-md-7" data-date="" data-date-format="yyyy-mm-dd" data-link-field="pick_up_time" data-link-format="yyyy-mm-dd">
@@ -156,6 +153,10 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">图片</label>
+                            <input type="file" name="image_file" title="选择图片" class="btn btn-sm btn-info m-b-sm"><br>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">公交线路名称</label>
