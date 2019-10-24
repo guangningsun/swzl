@@ -50,6 +50,8 @@ urlpatterns = [
     url(r'^get_all_lost', views.get_all_lost),
     url(r'^get_lost_by_bus_line', views.get_lost_by_bus_line),
     url(r'^modify_lost', views.modify_lost),
+    url(r'^web_modify_lost', views.web_modify_lost),
+    
     
     url(r'^image_file/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 

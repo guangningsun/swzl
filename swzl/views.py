@@ -305,27 +305,57 @@ def get_lost_by_bus_line(request):
         list_response.append(dict_tmp)
     return _generate_json_from_models(list_response)
 
-
+# is_received
+# 0 未领取
+# 1 待领取
+# 2 已领取
 def modify_lost(request):
     try:
         if request.POST:
             lost_info = LostInfo.objects.get(lost_id=request.POST['m_lost_id'])
-            lost_info.pick_up_time = request.POST['m_pick_up_time']
-            lost_info.bus_line_name = request.POST['m_bus_line_name']
-            lost_info.lost_type_name = request.POST['m_lost_type_name']
-            lost_info.receive_address = request.POST['m_receive_address']
+            if request.POST['m_pick_up_time'] != "":
+                lost_info.pick_up_time = request.POST['m_pick_up_time']
+            if request.POST['m_bus_line_name'] != "":
+                lost_info.bus_line_name = request.POST['m_bus_line_name']
+            if request.POST['m_lost_type_name'] !="":
+                lost_info.lost_type_name = request.POST['m_lost_type_name']
+            if request.POST['m_receive_address'] != "":
+                lost_info.receive_address = request.POST['m_receive_address']
             lost_info.is_received = request.POST['m_is_received']
-            lost_info.description = request.POST['m_description']
-            lost_info.received_name = request.POST['m_received_name']
-            lost_info.received_id_card = request.POST['m_received_id_card']
-            lost_info.received_phone_number = request.POST['m_received_phone_number']
-            lost_info.received_desc = request.POST['m_received_desc']
-            lost_info.contact_number = request.POST['m_contact_number']
+            if request.POST['m_description'] != "":
+                lost_info.description = request.POST['m_description']
+            if request.POST['m_received_name'] !="" :
+                lost_info.received_name = request.POST['m_received_name']
+            if request.POST['m_received_id_card'] !="" :
+                lost_info.received_id_card = request.POST['m_received_id_card']
+            if request.POST['m_received_phone_number'] !="" :
+                lost_info.received_phone_number = request.POST['m_received_phone_number']
+            if request.POST['m_received_desc'] !="" :
+                lost_info.received_desc = request.POST['m_received_desc']
+            if request.POST['m_contact_number'] !="" :
+                lost_info.contact_number = request.POST['m_contact_number']
+            if request.FILES.get('image_file')!="":
+                lost_info.image_obj = request.FILES.get('image_file')
             lost_info.save()
         return HttpResponseRedirect('/manage_lost')
     except:
         return HttpResponseRedirect('/manage_lost')
 
+
+def web_modify_lost(request):
+    try:
+        if request.POST:
+            lost_info = LostInfo.objects.get(lost_id=request.POST['lost_id'])
+            if lost_info.is_received and lost_info.is_received == 0:
+                lost_info.received_name = request.POST['received_name']
+                lost_info.received_id_card = request.POST['received_id_card']
+                lost_info.received_phone_number = request.POST['received_phone_number']
+                lost_info.received_desc = request.POST['received_desc']
+                lost_info.is_received = 1
+                lost_info.save()
+        return _generate_json_message(True, "Modify Lost Success")
+    except:
+        return _generate_json_message(False, "Modify Lost Failed")
 
 # 创建用户信息/用户注册
 # success
