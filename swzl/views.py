@@ -176,7 +176,7 @@ def create_bus_line(request):
                  bus_line_info.save()
          return HttpResponseRedirect('/manage_bus')
      except:
-         return HttpResponseRedirect('/manage_bug')
+         return HttpResponseRedirect('/manage_bus')
 
         
 def remove_bus_line(request):
@@ -227,6 +227,15 @@ def create_lost(request):
             try:
                 LostInfo.objects.get(login_name=request.POST['login_name'])
             except:
+                #image_file = request.FILES.get('image_file')
+                #base_path = os.getcwd()
+                #upload_file_path = base_path+"/image_file/"
+                #file_name = os.path.join(upload_file_path, uuid.uuid1())
+                #f = open(file_name, 'wb')
+                #for chunk in image_file.chunks():
+                #    f.write(chunk)
+                #f.close()
+
                 lost_info = LostInfo(
                     pick_up_time=request.POST['pick_up_time'],
                     bus_line_name=request.POST['bus_line_name'],
@@ -239,13 +248,17 @@ def create_lost(request):
                     received_id_card=request.POST['received_id_card'],
                     received_phone_number=request.POST['received_phone_number'],
                     received_desc=request.POST['received_desc'],
-                    contact_number=request.POST['contact_number']
+                    contact_number=request.POST['contact_number'],
+                    #image_path = file_name
+                    image_path = "",
+                    image_obj = request.FILES.get('image_file')
                     )
                 lost_info.save()
         # return render(request, 'manage_user.html', context)
         return HttpResponseRedirect('/manage_lost')
     except:
         return HttpResponseRedirect('/manage_lost')
+
 
 def remove_lost(request):
     context = {}
@@ -273,29 +286,76 @@ def get_all_lost(request):
 
 
 def get_lost_by_bus_line(request):
-    pass
+    list_response = []
+    search_date = request.POST['search_date']
+    lost_type_name = request.POST['lost_type_name']
+    bus_line_name = request.POST['bus_line_name']
+    list_response = []
+    list_lost = LostInfo.objects.all()
+    if search_date:
+        list_lost = list_lost.filter(pick_up_time=search_date)
+    if bus_line_name:
+        list_lost = list_lost.filter(bus_line_name=bus_line_name)
+    if lost_type_name:
+        list_lost = list_lost.filter(lost_type_name=lost_type_name)
+    for res in list_lost:
+        dict_tmp = {}
+        dict_tmp.update(res.__dict__)
+        dict_tmp.pop("_state", None)
+        list_response.append(dict_tmp)
+    return _generate_json_from_models(list_response)
 
-
+# is_received
+# 0 未领取
+# 1 待领取
+# 2 已领取
 def modify_lost(request):
     try:
         if request.POST:
             lost_info = LostInfo.objects.get(lost_id=request.POST['m_lost_id'])
-            lost_info.pick_up_time = request.POST['m_pick_up_time']
-            lost_info.bus_line_name = request.POST['m_bus_line_name']
-            lost_info.lost_type_name = request.POST['m_lost_type_name']
-            lost_info.receive_address = request.POST['m_receive_address']
+            if request.POST['m_pick_up_time'] != "":
+                lost_info.pick_up_time = request.POST['m_pick_up_time']
+            if request.POST['m_bus_line_name'] != "":
+                lost_info.bus_line_name = request.POST['m_bus_line_name']
+            if request.POST['m_lost_type_name'] !="":
+                lost_info.lost_type_name = request.POST['m_lost_type_name']
+            if request.POST['m_receive_address'] != "":
+                lost_info.receive_address = request.POST['m_receive_address']
             lost_info.is_received = request.POST['m_is_received']
-            lost_info.description = request.POST['m_description']
-            lost_info.received_name = request.POST['m_received_name']
-            lost_info.received_id_card = request.POST['m_received_id_card']
-            lost_info.received_phone_number = request.POST['m_received_phone_number']
-            lost_info.received_desc = request.POST['m_received_desc']
-            lost_info.contact_number = request.POST['m_contact_number']
+            if request.POST['m_description'] != "":
+                lost_info.description = request.POST['m_description']
+            if request.POST['m_received_name'] !="" :
+                lost_info.received_name = request.POST['m_received_name']
+            if request.POST['m_received_id_card'] !="" :
+                lost_info.received_id_card = request.POST['m_received_id_card']
+            if request.POST['m_received_phone_number'] !="" :
+                lost_info.received_phone_number = request.POST['m_received_phone_number']
+            if request.POST['m_received_desc'] !="" :
+                lost_info.received_desc = request.POST['m_received_desc']
+            if request.POST['m_contact_number'] !="" :
+                lost_info.contact_number = request.POST['m_contact_number']
+            if request.FILES.get('image_file')!="":
+                lost_info.image_obj = request.FILES.get('image_file')
             lost_info.save()
         return HttpResponseRedirect('/manage_lost')
     except:
         return HttpResponseRedirect('/manage_lost')
 
+
+def web_modify_lost(request):
+    try:
+        if request.POST:
+            lost_info = LostInfo.objects.get(lost_id=request.POST['lost_id'])
+            if lost_info.is_received and lost_info.is_received == 0:
+                lost_info.received_name = request.POST['received_name']
+                lost_info.received_id_card = request.POST['received_id_card']
+                lost_info.received_phone_number = request.POST['received_phone_number']
+                lost_info.received_desc = request.POST['received_desc']
+                lost_info.is_received = 1
+                lost_info.save()
+        return _generate_json_message(True, "Modify Lost Success")
+    except:
+        return _generate_json_message(False, "Modify Lost Failed")
 
 # 创建用户信息/用户注册
 # success
@@ -419,4 +479,6 @@ def init_web(request):
 # 找不到界面
 def page_not_found(request, exception):
     return render(request, '404.html', status=404)
+
+
 

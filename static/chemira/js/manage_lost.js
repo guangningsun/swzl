@@ -86,10 +86,10 @@ $(document).ready(function() {
             console.log(stu_obj);
             var lost_id = stu_obj.lost_id;
             var pick_up_time = stu_obj.pick_up_time;
-            var bus_line_name = stu_obj.bus_line_name;
+            //var bus_line_name = stu_obj.bus_line_name;
             var lost_type_name= stu_obj.lost_type_name;
             var receive_address = stu_obj.receive_address;
-            var is_received = stu_obj.is_received;
+            //var is_received = stu_obj.is_received;
             var description = stu_obj.description;
             var received_name = stu_obj.received_name;
             var received_id_card = stu_obj.received_id_card;
@@ -99,10 +99,10 @@ $(document).ready(function() {
 
             $('#m_lost_id')[0].value = lost_id;
             $('#m_pick_up_time')[0].value = pick_up_time;
-            $('#m_bus_line_name')[0].value = bus_line_name;
+            //$('#m_bus_line_name')[0].value = bus_line_name;
             $('#m_lost_type_name')[0].value = lost_type_name;
             $('#m_receive_address')[0].value = receive_address;
-            $('#m_is_received')[0].value = is_received;
+            //$('#m_is_received')[0].value = is_received;
             $('#m_description')[0].value = description;
             $('#m_received_name')[0].value = received_name;
             $('#m_received_id_card')[0].value = received_id_card;
@@ -183,13 +183,6 @@ $(document).ready(function() {
         checkbox: true
     });
     columns.push({
-        field: 'lost_id',
-        title: '失物ID',
-        align: 'center',
-        valign: 'middle',
-        sortable: true
-    });
-    columns.push({
         field: 'pick_up_time',
         title: '拾取时间',
         align: 'center',
@@ -260,8 +253,8 @@ $(document).ready(function() {
         sortable: true
     });
     columns.push({
-        field: 'is_received',
-        title: '是否已领取',
+        field: 'image_obj',
+        title: '图片地址',
         align: 'center',
         valign: 'middle',
         sortable: true
