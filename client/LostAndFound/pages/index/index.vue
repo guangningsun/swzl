@@ -146,7 +146,7 @@
                     return h + ':' + m;
             },
             onSubmit() {
-                var date = '';
+                var date = this.date;
                 var type_name = '';
                 var bus_line_name = '';
 
@@ -157,6 +157,10 @@
                 if (this.bus_route_picker[this.route_picker_index] !== undefined) {
                     bus_line_name = this.bus_route_picker[this.route_picker_index];
                 }
+
+                console.log("date:" + date);
+                console.log("type:" + type_name);
+                console.log("bus_line_name:" + bus_line_name);
 
                 uni.request({
                     url: 'http://114.115.136.120:8002/get_lost_by_bus_line',
@@ -179,6 +183,11 @@
                         }
                         else {
                             console.log('no result')
+                            uni.showToast({
+                                title: '无查找结果',
+                                icon: "none",
+                                mask: !1
+                            })
                         }
                     }
                 });

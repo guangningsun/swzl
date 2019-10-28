@@ -24,6 +24,12 @@
       "style": {
         "navigationBarTitleText": "失物领取登记"
       }
+    },
+    {
+      "path": "pages/register/item_register_success",
+      "style": {
+        "navigationBarTitleText": "失物领取登记成功"
+      }
     }
   ],
   "globalStyle": {

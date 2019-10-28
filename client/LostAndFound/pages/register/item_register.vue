@@ -92,9 +92,9 @@
             itemDescInput(e) {
                 this.itemDescValue = e.detail.value
             },
-            goToResultList() {
+            goToRegisterSuccess() {
                 uni.navigateTo({
-                    url: '../../pages/result/item_result'
+                    url: '../../pages/register/item_register_success'
                 });
             },
             ChooseImage() {
@@ -154,6 +154,9 @@
                         },
                         success: function (result) {
                             console.log(result);
+                            uni.navigateTo({
+                                url: '../../pages/register/item_register_success'
+                            });
                         }
                     });
                 }
