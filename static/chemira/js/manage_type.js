@@ -40,26 +40,13 @@ $(document).ready(function() {
         selections = [];
 
     function operateFormatter(value, row, index) {
-        if (row.dev_status === "空闲") {
-            return [
-                '<a class="checkin" href="javascript:void(0)" title="登记">',
-                '<i class="icon-plus-sign-alt text-primary"></i>',
-                '</a>  ',
-                '<a class="remove" href="javascript:void(0)" title="删除">',
-                '<i class="icon-remove text-danger"></i>',
-                '</a>'
-            ].join('');
-        } else {
-            return [
-                '<a class="modify" href="javascript:void(0)" title="修改">',
-                '<i class="icon-pencil text-primary"></i>',
-                '</a>  ',
-                '<a class="remove" href="javascript:void(0)" title="删除">',
-                '<i class="icon-remove text-danger"></i>',
-                '</a>'
-            ].join('');
-        }
 
+            return [
+                '<a class="remove" href="javascript:void(0)" title="删除">',
+                '<i class="icon-remove text-danger"></i>',
+                '</a>'
+            ].join('');
+    
     }
 
 
