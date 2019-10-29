@@ -257,7 +257,11 @@ $(document).ready(function() {
         title: '图片地址',
         align: 'center',
         valign: 'middle',
-        sortable: true
+        sortable: true,
+        width : '15%',
+        formatter : function (value, row, index) {
+                return "<img style='width: 50px;height: 50px;' src='/image_file/"+row['image_obj']+"' alt=''>"
+        }
     });
     columns.push({
         field: 'operate',
@@ -281,6 +285,13 @@ $(document).ready(function() {
         success: function(data) {
             var allRoomDataObjs = eval(data);
             $('#table').bootstrapTable('destroy').bootstrapTable({
+                detailView : true,
+                detailFormatter : function (index, row) {
+                    var image = '<div class="photos">'
+                    +'<a target="_blank" href="/image_file/'+row['image_obj']+'"><img alt="image" class="feed-photo" src="/image_file/'+row['image_obj']+'"></a>'
+                    +'</div>';
+                    return image;
+                },
                 data: allRoomDataObjs,
                 columns: columns
             });
