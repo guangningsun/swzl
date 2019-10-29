@@ -44,7 +44,7 @@
         </view>
 
         <view class="padding flex flex-direction">
-            <button class="cu-btn bg-gradual-green margin-tb-sm lg" @click="onSubmit">提交</button>
+            <button class="cu-btn bg-gradual-green margin-tb-sm lg" :disabled = "btn_disabled" @click="onSubmit">提交</button>
         </view>
 
     </view>
@@ -58,25 +58,30 @@
                 type_picker_index: -1,
                 time: '12:00',
                 date: '2018-12-25',
-                bus_route_picker: [''],
-                type_picker: ['']
+                bus_route_picker: [],
+                type_picker: [],
+                btn_disabled: true
             };
         },
         methods: {
             timeChange(e) {
-                this.time = e.detail.value
+                this.time = e.detail.value;
+                this.checkBtnEnable();
             },
             dateChange(e) {
-                this.date = e.detail.value
+                this.date = e.detail.value;
+                this.checkBtnEnable();
             },
             busRoutePickerChange(e) {
-                this.route_picker_index = e.detail.value
+                this.route_picker_index = e.detail.value;
+                this.checkBtnEnable();
             },
             typePickerChange(e) {
-                this.type_picker_index = e.detail.value
+                this.type_picker_index = e.detail.value;
+                this.checkBtnEnable();
             },
             itemDescInput(e) {
-                this.itemDescValue = e.detail.value
+                this.itemDescValue = e.detail.value;
             },
             goToResultList() {
                 uni.navigateTo({
@@ -88,7 +93,7 @@
                 uni.request({
                     url: 'http://114.115.136.120:8002/get_all_bus_line',
                     method: "POST",
-                    dataType:'json',
+                    dataType: 'json',
                     header: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -100,7 +105,8 @@
                     fail: (err) => {
                         console.log('request bus line fail', err);
                     },
-                    complete: () => {}
+                    complete: () => {
+                    }
                 });
             },
             requestLostType() {
@@ -108,7 +114,7 @@
                 uni.request({
                     url: 'http://114.115.136.120:8002/get_all_type',
                     method: "POST",
-                    dataType:'json',
+                    dataType: 'json',
                     header: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -120,7 +126,8 @@
                     fail: (err) => {
                         console.log('request get_all_type fail', err);
                     },
-                    complete: () => {}
+                    complete: () => {
+                    }
                 });
             },
             getTodayDate() {
@@ -138,12 +145,23 @@
                 return year + seperator + month + seperator + strDate;
             },
             getNowTime() {
-                    let date = new Date();
-                    let h = date.getHours();
-                    h = h < 10 ? ('0' + h) : h;
-                    let m = date.getMinutes();
-                    m = m < 10 ? ('0' + m) : m;
-                    return h + ':' + m;
+                let date = new Date();
+                let h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                let m = date.getMinutes();
+                m = m < 10 ? ('0' + m) : m;
+                return h + ':' + m;
+            },
+            checkBtnEnable() {
+                if (this.date == ''
+                    || this.bus_route_picker[this.route_picker_index] == ''
+                    || this.bus_route_picker[this.route_picker_index] == undefined
+                    || this.type_picker[this.type_picker_index] == ''
+                    || this.type_picker[this.type_picker_index] == undefined) {
+                    this.btn_disabled = true;
+                } else {
+                    this.btn_disabled = false;
+                }
             },
             onSubmit() {
                 var date = this.date;
