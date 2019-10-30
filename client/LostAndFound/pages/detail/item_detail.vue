@@ -74,7 +74,7 @@
             this.item_type = this.lost_detail.lost_type_name;
             this.item_address = this.lost_detail.receive_address;
             this.item_desc = this.lost_detail.received_desc;
-            this.tel = this.lost_detail.received_phone_number;
+            this.tel = this.lost_detail.contact_number;
             this.image = "http://114.115.136.120:8002/image_file/" + this.lost_detail.image_obj;
         }
     }

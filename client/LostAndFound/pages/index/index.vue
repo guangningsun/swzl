@@ -57,7 +57,7 @@
                 route_picker_index: -1,
                 type_picker_index: -1,
                 time: '12:00',
-                date: '2018-12-25',
+                date: '2019-11-01',
                 bus_route_picker: [],
                 type_picker: [],
                 btn_disabled: true
