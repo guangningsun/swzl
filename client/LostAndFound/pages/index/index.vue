@@ -18,14 +18,14 @@
                 </view>
             </picker>
         </view>
-        <view class="cu-form-group ">
-            <view class="title">时间选择</view>
-            <picker mode="time" :value="time" start="00:01" end="23:59" @change="timeChange">
-                <view class="picker">
-                    {{time}}
-                </view>
-            </picker>
-        </view>
+        <!--<view class="cu-form-group ">-->
+            <!--<view class="title">时间选择</view>-->
+            <!--<picker mode="time" :value="time" start="00:01" end="23:59" @change="timeChange">-->
+                <!--<view class="picker">-->
+                    <!--{{time}}-->
+                <!--</view>-->
+            <!--</picker>-->
+        <!--</view>-->
         <view class="cu-form-group">
             <view class="title">请选择路线</view>
             <picker @change="busRoutePickerChange" :value="route_picker_index" :range="bus_route_picker">
@@ -73,11 +73,19 @@
                 this.checkBtnEnable();
             },
             busRoutePickerChange(e) {
-                this.route_picker_index = e.detail.value;
+                if (this.route_picker_index === -1) {
+                    this.route_picker_index = 0;
+                } else {
+                    this.route_picker_index = e.detail.value;
+                }
                 this.checkBtnEnable();
             },
             typePickerChange(e) {
-                this.type_picker_index = e.detail.value;
+                if (this.type_picker_index === -1) {
+                    this.type_picker_index = 0;
+                } else {
+                    this.type_picker_index = e.detail.value;
+                }
                 this.checkBtnEnable();
             },
             itemDescInput(e) {
