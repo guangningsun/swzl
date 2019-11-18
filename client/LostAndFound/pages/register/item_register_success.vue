@@ -32,7 +32,7 @@
         onShow() {
             this.lost_detail = uni.getStorageSync('key_lost_detail');
             this.item_address = this.lost_detail.receive_address;
-            this.tel = this.lost_detail.received_phone_number;
+            this.tel = this.lost_detail.contact_number;
         }
     }
 </script>
