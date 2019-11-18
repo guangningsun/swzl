@@ -346,7 +346,7 @@ def web_modify_lost(request):
     try:
         if request.POST:
             lost_info = LostInfo.objects.get(lost_id=request.POST['lost_id'])
-            if lost_info.is_received and lost_info.is_received == 0:
+            if lost_info.is_received == "0":
                 lost_info.received_name = request.POST['received_name']
                 lost_info.received_id_card = request.POST['received_id_card']
                 lost_info.received_phone_number = request.POST['received_phone_number']
