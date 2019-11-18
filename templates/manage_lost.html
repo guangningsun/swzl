@@ -505,14 +505,14 @@
         $(".m_lost_type_name").selectpicker({
             noneSelectedText : '请选择失物类型'
         });
-        loadParkdata(); 
+        m_loadParkdata(); 
         $(window).on('load', function() {
             $('.m_lost_type_name').selectpicker('refresh');
         });
  
     });
     
-    function loadParkdata(){
+    function m_loadParkdata(){
        $.ajax({
             url : "/get_all_type",
             type : 'GET',
