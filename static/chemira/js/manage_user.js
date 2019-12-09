@@ -196,7 +196,7 @@ $(document).ready(function() {
     });
     columns.push({
         field: 'login_name',
-        title: '登录名',
+        title: '昵称',
         align: 'center',
         valign: 'middle',
         sortable: true
