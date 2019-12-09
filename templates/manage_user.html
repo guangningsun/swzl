@@ -264,7 +264,7 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">公交线路名称</label>
                                <!--multiple-->
-                                <select id="m_bus_line_name" name="m_bus_line_name" class="m_bus_line_name  col-sm-7"  type="text"  data-live-search="true" >
+                                <select id="m_class_id" name="m_class_id" class="m_class_id  col-sm-7"  type="text"  data-live-search="true" >
                                 </select> 
                             </div>
                         </div>
@@ -326,12 +326,12 @@
     <script src="/static/chemira/js/manage_user.js"></script>
     <script type="text/javascript">
         $(function() {
-            $(".m_bus_line_name").selectpicker({
+            $(".m_class_id").selectpicker({
                 noneSelectedText : '请选择公交线路'
             });
             m_loadbusdata();
             $(window).on('load', function() {
-                $('.m_bus_line_name').selectpicker('refresh');
+                $('.m_class_id').selectpicker('refresh');
             });
      
         });
@@ -349,7 +349,7 @@
                             var parkdata = data[i];
 　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.bus_line_name+'">'+parkdata.bus_line_name+'</option>') 
                        }
-                        $("#m_bus_line_name").html(parknames.join(' '));
+                        $("#m_class_id").html(parknames.join(' '));
                     }
                 },
                 error : function() {

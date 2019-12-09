@@ -105,7 +105,7 @@ $(document).ready(function() {
             
             delete $('#user_permission_admin').checked;
             delete $('#user_permission_teacher').checked;
-            if (user_obj.user_permission === '0'){
+            if (user_obj.user_permission === '管理员'){
                 $('#user_permission_admin').attr("checked", "checked");
             } else {
                 $('#user_permission_teacher').attr("checked", "checked");
@@ -265,6 +265,15 @@ $(document).ready(function() {
         success: function(data) {
             var allRoomDataObjs = eval(data);
             console.log(allRoomDataObjs);
+            for(var i = 0; i < allRoomDataObjs.length; i++){
+                if (allRoomDataObjs[i].user_permission == "0"){
+                   allRoomDataObjs[i].user_permission = "管理员"
+                }
+                else {
+                   allRoomDataObjs[i].user_permission = "线路管理员"
+                }
+ 
+             }
             $('#table').bootstrapTable('destroy').bootstrapTable({
                 data: allRoomDataObjs,
                 columns: columns
