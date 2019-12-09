@@ -9,18 +9,20 @@
     <link rel="stylesheet" href="/static/chemira/css/room_manager.css">
     <link rel="stylesheet" href="/static/chemira/css/bootstrap-table.min.css">
     <link rel="stylesheet" href="/static/chemira/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-select.min.css">
+
     <!--[if lt IE 9]>
     <script src="js/ie/respond.min.js" cache="false"></script>
     <script src="js/ie/html5.js" cache="false"></script>
-    <script src="js/ie/fix.js" cache="false"></script> <![endif] validator.js-->
+    <script src="js/ie/fix.js" cache="false"></script> <![endif]-->
     <script src="/static/chemira/css/app.v1.js"></script>
     <script src="/static/chemira/js/bootstrap3-validation.js"></script>
-    <script src="/static/chemira/js/validator.js"></script>
     <script src="/static/chemira/js/tableExport.js"></script>
     <script src="/static/chemira/js/jquery.base64.js"></script>
     <script src="/static/chemira/js/bootstrap-table.js"></script>
     <script src="/static/chemira/js/bootstrap-table-export.js"></script>
     <script src="/static/chemira/js/bootstrap-table-zh-CN.js"></script>
+    <script src="/static/chemira/js/bootstrap-select.min.js"></script>
     <script>
     $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN']);
     </script>
@@ -176,7 +178,7 @@
                             <div class="radio-inline">
                               <label>
                                 <input type="radio" name="user_permission" value="1" required>
-                                教师
+                                线路管理员
                               </label>
                             </div>
                           </div>
@@ -187,10 +189,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">班级号</label>
-                            <div class="col-sm-8">
-                                <input name="class_id" class="form-control" id="class_id" type="text" required placeholder="请输入班级号...">
-                            </div>
+                            <label class="col-sm-3 control-label">公交线路名称</label>
+                           <!--multiple-->
+                            <select id="class_id" name="class_id" class="class_id  col-sm-7"  type="text"  data-live-search="true" >
+                            </select> 
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -249,7 +251,7 @@
                                 <div class="radio-inline">
                                   <label>
                                     <input type="radio" id="user_permission_teacher" name="user_permission" value="1" required>
-                                    教师
+                                    线路管理员
                                   </label>
                                 </div>
                               </div>
@@ -260,10 +262,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">班级号</label>
-                                <div class="col-sm-8">
-                                    <input name="class_id" class="form-control" id="m_class_id" type="text" required placeholder="请输入班级号...">
-                                </div>
+                                <label class="col-sm-3 control-label">公交线路名称</label>
+                               <!--multiple-->
+                                <select id="m_bus_line_name" name="m_bus_line_name" class="m_bus_line_name  col-sm-7"  type="text"  data-live-search="true" >
+                                </select> 
                             </div>
                         </div>
                         <input name="is_deleted"  id="m_is_deleted"  type="hidden">
@@ -322,5 +324,74 @@
     <!-- Sparkline Chart -->
     <!-- App -->
     <script src="/static/chemira/js/manage_user.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".m_bus_line_name").selectpicker({
+                noneSelectedText : '请选择公交线路'
+            });
+            m_loadbusdata();
+            $(window).on('load', function() {
+                $('.m_bus_line_name').selectpicker('refresh');
+            });
+     
+        });
+        
+        function m_loadbusdata(){
+           $.ajax({
+                url : "/get_all_bus_line",
+                type : 'GET',
+                async : false,
+                datatype : 'json',
+                success : function(data) {
+                    if(data){
+                        var parknames =[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            var parkdata = data[i];
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.bus_line_name+'">'+parkdata.bus_line_name+'</option>') 
+                       }
+                        $("#m_bus_line_name").html(parknames.join(' '));
+                    }
+                },
+                error : function() {
+                    alert('查询公交线路名称出错');
+                }
+            });
+        }
+    </script>
+<script type="text/javascript">
+    $(function() {
+        $(".class_id").selectpicker({
+            noneSelectedText : '请选择公交线路'
+        });
+        loadbusdata();
+        $(window).on('load', function() {
+            $('.class_id').selectpicker('refresh');
+        });
+ 
+    });
+    
+    function loadbusdata(){
+       $.ajax({
+            url : "/get_all_bus_line",
+            type : 'GET',
+            async : false,
+            datatype : 'json',
+            success : function(data) {
+                console.log(data)
+                if(data){
+                    var parknames =[];
+                    for(var i=0,len=data.length;i<len;i++){
+                        var parkdata = data[i];
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.bus_line_name+'">'+parkdata.bus_line_name+'</option>') 
+                   }
+                    $("#class_id").html(parknames.join(' '));
+                }
+            },
+            error : function() {
+                alert('查询公交线路名称出错');
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -87,7 +87,7 @@ $(document).ready(function() {
             var username = user_obj.username;
             var login_name = user_obj.login_name;
             var description = user_obj.description;
-            var class_id= user_obj.class_id;
+            //var class_id= user_obj.class_id;
             var is_deleted = user_obj.is_deleted;
             var create_time = user_obj.create_time;
             var user_id = user_obj.user_id;
@@ -95,7 +95,7 @@ $(document).ready(function() {
             $('#m_username')[0].value = username;
             $('#m_login_name')[0].value = login_name;
             $('#m_description')[0].value = description;
-            $('#m_class_id')[0].value = class_id;
+            //$('#m_class_id')[0].value = class_id;
             $('#password')[0].value = "";
             $('#m_is_deleted')[0].value = is_deleted;
             $('#m_create_time')[0].value = create_time;
@@ -238,7 +238,7 @@ $(document).ready(function() {
     });
     columns.push({
         field: 'class_id',
-        title: '班级号',
+        title: '线路号',
         align: 'center',
         valign: 'middle',
         sortable: true
