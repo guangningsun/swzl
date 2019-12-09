@@ -103,6 +103,16 @@ $(document).ready(function() {
             $('#m_lost_type_name')[0].value = lost_type_name;
             $('#m_receive_address')[0].value = receive_address;
             //$('#m_is_received')[0].value = is_received;
+            delete $('#m_is_received_no').checked;
+            delete $('#m_is_received_wait').checked;
+            delete $('#m_is_received_yes').checked;
+            if (stu_obj.is_received === '未领取'){
+                $('#m_is_received_no').attr("checked", "checked");
+            } else if (stu_obj.is_received === '待领取'){
+                $('#m_is_received_wait').attr("checked", "checked");
+            } else {
+                $('#m_is_received_yes').attr("checked", "checked");
+            }
             $('#m_description')[0].value = description;
             $('#m_received_name')[0].value = received_name;
             $('#m_received_id_card')[0].value = received_id_card;
@@ -284,6 +294,17 @@ $(document).ready(function() {
         url: '/get_all_lost',
         success: function(data) {
             var allRoomDataObjs = eval(data);
+            for(var i = 0; i < allRoomDataObjs.length; i++){
+                if (allRoomDataObjs[i].is_received == "0"){
+                   allRoomDataObjs[i].is_received = "未领取"
+                }
+                else if  (allRoomDataObjs[i].is_received == "1"){
+                   allRoomDataObjs[i].is_received = "待领取"
+                } else {
+                allRoomDataObjs[i].is_received = "已领取"
+                }
+             }
+             console.log(allRoomDataObjs)
             $('#table').bootstrapTable('destroy').bootstrapTable({
                 detailView : true,
                 detailFormatter : function (index, row) {
