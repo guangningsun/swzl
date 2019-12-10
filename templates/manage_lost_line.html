@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>失物招领系统</title>
+    <meta name="description" content="mis">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/css/app.v1.css">
+    <link rel="stylesheet" href="/static/chemira/css/room_manager.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/chemira/css/bootstrap-select.min.css">
+
+    <!--[if lt IE 9]>
+    <script src="js/ie/respond.min.js" cache="false"></script>
+    <script src="js/ie/html5.js" cache="false"></script>
+    <script src="js/ie/fix.js" cache="false"></script> <![endif]-->
+    <script src="/static/chemira/css/app.v1.js"></script>
+    <script src="/static/chemira/js/bootstrap3-validation.js"></script>
+    <script src="/static/chemira/js/tableExport.js"></script>
+    <script src="/static/chemira/js/jquery.base64.js"></script>
+    <script src="/static/chemira/js/bootstrap-table.js"></script>
+    <script src="/static/chemira/js/bootstrap-table-export.js"></script>
+    <script src="/static/chemira/js/bootstrap-table-zh-CN.js"></script>
+    <script src="/static/chemira/js/bootstrap-select.min.js"></script>
+    <script>
+    $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN']);
+    </script>
+    <script src="/static/chemira/js/jquery.toggle-password.js"></script>
+    <script src="/static/chemira/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/static/chemira/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <script src="/static/chemira/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+    <section class="hbox stretch">
+        <!-- .aside -->
+        <aside class="bg-dark aside-sm" id="nav">
+            <section class="vbox">
+                <header class="dker nav-bar">
+                    <a href="#" class="nav-brand" data-toggle="fullscreen" id="navi_domain">失物管理</a>
+                    <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
+                        <i class="icon-comment-alt"></i>
+                    </a>
+                </header>
+                <footer class="footer bg-gradient hidden-xs">
+                    <a href="/logout" class="btn btn-sm btn-link m-r-n-xs pull-right">
+                        <i class="icon-off"></i>
+                    </a>
+                </footer>
+                <section>
+                    <!-- user -->
+                    <div class="bg-success nav-user hidden-xs pos-rlt">
+                        <div class="nav-avatar pos-rlt">
+                            <a href="#" class="thumb-sm avatar animated rollIn" data-toggle="dropdown">
+                                <img src="/static/images/avatar.jpg" alt="" class="">
+                                <span class="caret caret-white"></span>
+                            </a>
+                            <ul class="dropdown-menu m-t-sm animated fadeInLeft">
+                                <span class="arrow top"></span>
+                                <li><a href="/logout">logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="nav-msg">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <b class="badge badge-white count-n" id="navi_user_name"></b>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- / user -->
+                    <!-- nav -->
+                    <nav class="nav-primary hidden-xs">
+                            <ul class="nav">
+                                    <li class="active">
+                                            <a href="/manage_lost">
+                                                <i class="icon-tasks"></i>
+                                                <span>失物管理</span>
+                                            </a>
+                                        </li>
+                                </ul>
+                    </nav>
+                    <!-- / nav -->
+                    <!-- note -->
+                    <!-- <div class="bg-danger wrapper hidden-vertical animated rollIn text-sm">
+                            <a href="#" data-dismiss="alert" class="pull-right m-r-n-sm m-t-n-sm"><i class="icon-close icon-remove "></i></a>
+                            Hi, this is welcome msg.
+                        </div> -->
+                    <!-- / note -->
+                </section>
+            </section>
+        </aside>
+        <!-- /.aside -->
+        <!-- .vbox -->
+        <section id="content">
+            <section>
+                <header class="header bg-white b-b">
+                    <p>失物招领</p>
+                </header>
+                <div class="container">
+                    <!-- <div class="panel" id="user_table"></div> -->
+                    <div id="toolbar" class="pull-left col-">
+                        <button id="remove" class="btn btn-danger">
+                            <i class="icon-remove"></i>删除记录
+                        </button>
+                        <button id="addSingle" class="btn btn-success " data-toggle="modal" data-target="#addSingleRoom">
+                            <i class="icon-plus"></i>添加记录
+                        </button>
+                    </div>
+                    
+                    <table style="background: #EBF8EC" id="table" data-show-columns="true" data-search="true" data-toolbar="#toolbar" data-show-toggle="true" data-pagination="true" data-height="525" data-striped="true" data-id-field="id" data-url="" data-checkbox-header="true" data-show-pagination-switch="true" data-page-list="[10, 25, 50, 100, all]">
+                    </table>
+                </div>
+     
+                
+
+            </section>
+            <a href="/logout" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="body"></a>
+        </section>
+        <!-- /.vbox -->
+    </section>
+    <div class="modal fade" id="addSingleRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-primary" id="myModalLabel">添加失物记录</h4>
+                </div>
+                <form id="add_room_form" action="/create_lost/" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >
+                        
+                        <div class="form-group row modalPanel" >
+                            <label for="pick_up_time" class="col-md-3 control-label">失物拾取时间</label>
+                            <div class="input-group date form_date col-md-7" data-date="" data-date-format="yyyy-mm-dd" data-link-field="pick_up_time" data-link-format="yyyy-mm-dd">
+                                <input id="pick_up_time" name="pick_up_time" class="form-control" size="16" type="text" value=""  check-type="required" required-message="请选择周期">
+                                <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">图片</label>
+                            <input type="file" name="image_file" title="选择图片" class="btn btn-sm btn-info m-b-sm"><br>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">公交线路名称</label>
+                           <!--multiple-->
+                            <select id="bus_line_name" name="bus_line_name" class="bus_line_name  col-sm-7"  type="text"  data-live-search="true" >
+                            </select> 
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">失物类型</label>
+                            <select id="lost_type_name" name="lost_type_name" class="lost_type_name  col-sm-7"  type="text"  data-live-search="true" >
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">领取地址</label>
+                            <div class="col-sm-7">
+                                <input name="receive_address" class="form-control" id="receive_address" type="text" placeholder="请输入领取地址...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">失物特征描述</label>
+                                <div class="col-sm-7">
+                                    <input name="description" class="form-control" id="description" type="text" placeholder="请输入失物特征...">
+                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">联系电话</label>
+                            <div class="col-sm-7">
+                                <input name="contact_number" class="form-control" id="contact_number" type="text" placeholder="请输入联系电话...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否已领取</label>
+                            <div class="col-sm-7">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_received" id="optionsRadios1" value="0" checked> 未领取
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_received" id="optionsRadios2"  value="1">  待领取
+                            </label>
+                            <label class="radio-inline">
+                                    <input type="radio" name="is_received" id="optionsRadios3"  value="2">  已领取
+                            </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">领取人姓名</label>
+                                <div class="col-sm-7">
+                                    <input name="received_name" class="form-control" id="received_name" type="text" placeholder="请输入领取人姓名...">
+                                </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">领取人身份证</label>
+                                    <div class="col-sm-7">
+                                        <input name="received_id_card" class="form-control" id="received_id_card" type="text" placeholder="请输入领取人身份证...">
+                                    </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">领取人电话</label>
+                                <div class="col-sm-7">
+                                    <input name="received_phone_number" class="form-control" id="received_phone_number" type="text" placeholder="请输入领取人电话...">
+                                </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">领取人描述</label>
+                                <div class="col-sm-7">
+                                    <input name="received_desc" class="form-control" id="received_desc" type="text" placeholder="请输入领取人描述...">
+                                </div>
+                        </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-success">创建</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- modify-->
+    <div class="modal fade" id="modifySingleLost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-primary" id="myModalLabel">修改失物信息</h4>
+                    </div>
+                    <form id="modify_user_form" action="/modify_lost/" class="form-horizontal" role="form" method="post" data-toggle="validator" >
+                        <div class="form-group row modalPanel" >
+                                <label for="pick_up_time" class="col-md-3 control-label">失物拾取时间</label>
+                                <div class="input-group date form_date col-md-7" data-date="" data-date-format="yyyy-mm-dd" data-link-field="m_pick_up_time" data-link-format="yyyy-mm-dd">
+                                    <input id="m_pick_up_time" name="m_pick_up_time" class="form-control" size="16" type="text" value=""  check-type="required" required-message="请选择周期">
+                                    <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">公交线路名称</label>
+                               <!--multiple-->
+                                <select id="m_bus_line_name" name="m_bus_line_name" class="m_bus_line_name  col-sm-7"  type="text"  data-live-search="true" >
+                                </select> 
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">失物类型</label>
+                                <select id="m_lost_type_name" name="m_lost_type_name" class="m_lost_type_name  col-sm-7"  type="text"  data-live-search="true" >
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">领取地址</label>
+                                <div class="col-sm-7">
+                                    <input name="m_receive_address" class="form-control" id="m_receive_address" type="text" placeholder="请输入领取地址...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">失物特征描述</label>
+                                    <div class="col-sm-7">
+                                        <input name="m_description" class="form-control" id="m_description" type="text" placeholder="请输入失物特征...">
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">联系电话</label>
+                                <div class="col-sm-7">
+                                    <input name="m_contact_number" class="form-control" id="m_contact_number" type="text" placeholder="请输入联系电话...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">是否已领取</label>
+                                <div class="col-sm-7">
+                                <label class="radio-inline">
+                                    <input type="radio" name="m_is_received" id="m_is_received_no" value="0"> 未领取
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="m_is_received" id="m_is_received_wait"  value="1">  待领取
+                                </label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="m_is_received" id="m_is_received_yes"  value="2">  已领取
+                                </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">领取人姓名</label>
+                                    <div class="col-sm-7">
+                                        <input name="m_received_name" class="form-control" id="m_received_name" type="text" placeholder="请输入领取人姓名...">
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">领取人身份证</label>
+                                        <div class="col-sm-7">
+                                            <input name="m_received_id_card" class="form-control" id="m_received_id_card" type="text" placeholder="请输入领取人身份证...">
+                                        </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">领取人电话</label>
+                                    <div class="col-sm-7">
+                                        <input name="m_received_phone_number" class="form-control" id="m_received_phone_number" type="text" placeholder="请输入领取人电话...">
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">领取人描述</label>
+                                    <div class="col-sm-7">
+                                        <input name="m_received_desc" class="form-control" id="m_received_desc" type="text" placeholder="请输入领取人描述...">
+                                    </div>
+                            </div>
+                        <input name="m_lost_id"  id="m_lost_id"  type="hidden">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                            <button type="submit" class="btn btn-success" >修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- end modify-->
+    <div class="modal fade" id="deleteMultiRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-danger" id="myModalLabel">警告</h4>
+                </div>
+                <form id="delete_room_form" action="" class="form-horizontal" role="form" method="post">
+                    <div class="modal-body">
+                        <p>确认删除</p>
+                        <p class="text-left text-justify" id="deleteMultiRoomMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button type="button" id="deleteMultiRoomOk" class="btn btn-success">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteSingleRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-danger" id="myModalLabel">警告</h4>
+                </div>
+                <form id="delete_single_room_form" action="" class="form-horizontal" role="form" method="post">
+                    <div class="modal-body">
+                        <p>确认删除</p>
+                        <p class="text-left text-justify" id="deleteSingleRoomMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button type="button" id="deleteSingleRoomOk" class="btn btn-success">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap -->
+    <!-- Sparkline Chart -->
+    <!-- App -->
+    <script src="/static/chemira/js/manage_lost.js"></script>
+    <script type="text/javascript">
+        $('.form_date').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+    </script>
+        <script type="text/javascript">
+            $(function() {
+                $(".m_bus_line_name").selectpicker({
+                    noneSelectedText : '请选择公交线路'
+                });
+                m_loadbusdata();
+                $(window).on('load', function() {
+                    $('.m_bus_line_name').selectpicker('refresh');
+                });
+         
+            });
+            
+            function m_loadbusdata(){
+               $.ajax({
+                    url : "/get_all_bus_line",
+                    type : 'GET',
+                    async : false,
+                    datatype : 'json',
+                    success : function(data) {
+                        if(data){
+                            var parknames =[];
+                            for(var i=0,len=data.length;i<len;i++){
+                                var parkdata = data[i];
+    　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.bus_line_name+'">'+parkdata.bus_line_name+'</option>') 
+                           }
+                            $("#m_bus_line_name").html(parknames.join(' '));
+                        }
+                    },
+                    error : function() {
+                        alert('查询公交线路名称出错');
+                    }
+                });
+            }
+        </script>
+    <script type="text/javascript">
+        $(function() {
+            $(".bus_line_name").selectpicker({
+                noneSelectedText : '请选择公交线路'
+            });
+            loadbusdata();
+            $(window).on('load', function() {
+                $('.bus_line_name').selectpicker('refresh');
+            });
+     
+        });
+        
+        function loadbusdata(){
+           $.ajax({
+                url : "/get_all_bus_line",
+                type : 'GET',
+                async : false,
+                datatype : 'json',
+                success : function(data) {
+                    console.log(data)
+                    if(data){
+                        var parknames =[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            var parkdata = data[i];
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.bus_line_name+'">'+parkdata.bus_line_name+'</option>') 
+                       }
+                        $("#bus_line_name").html(parknames.join(' '));
+                    }
+                },
+                error : function() {
+                    alert('查询公交线路名称出错');
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(".lost_type_name").selectpicker({
+                noneSelectedText : '请选择失物类型'
+            });
+            loadParkdata(); 
+            $(window).on('load', function() {
+                $('.lost_type_name').selectpicker('refresh');
+            });
+     
+        });
+        
+        function loadParkdata(){
+           $.ajax({
+                url : "/get_all_type",
+                type : 'GET',
+                async : false,
+                datatype : 'json',
+                success : function(data) {
+                    console.log(data)
+                    if(data){
+                        var parknames =[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            var parkdata = data[i];
+　　　　　　　　　　　　　　　　　//拼接成多个<option><option/>
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.lost_type_name+'">'+parkdata.lost_type_name+'</option>') 
+                       }
+                        $("#lost_type_name").html(parknames.join(' '));
+                    }
+                },
+                error : function() {
+                    alert('查询失物类型出错');
+                }
+            });
+        }
+    </script>
+
+<script type="text/javascript">
+    $(function() {
+        $(".m_lost_type_name").selectpicker({
+            noneSelectedText : '请选择失物类型'
+        });
+        m_loadParkdata(); 
+        $(window).on('load', function() {
+            $('.m_lost_type_name').selectpicker('refresh');
+        });
+ 
+    });
+    
+    function m_loadParkdata(){
+       $.ajax({
+            url : "/get_all_type",
+            type : 'GET',
+            async : false,
+            datatype : 'json',
+            success : function(data) {
+                console.log(data)
+                if(data){
+                    var parknames =[];
+                    for(var i=0,len=data.length;i<len;i++){
+                        var parkdata = data[i];
+　　　　　　　　　　　　　　　　　//拼接成多个<option><option/>
+　　　　　　　　　　　　　　　　　parknames.push('<option value="'+parkdata.lost_type_name+'">'+parkdata.lost_type_name+'</option>') 
+                   }
+                    $("#m_lost_type_name").html(parknames.join(' '));
+                }
+            },
+            error : function() {
+                alert('查询失物类型出错');
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

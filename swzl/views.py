@@ -464,9 +464,12 @@ def user_login(request):
                 user_info = UserInfo.objects.get(username=login_username)
             if user_info is not None:
                 if user_info.password == login_password:
-                    return render(request, 'manage_lost.html', context)
+                    if user_info.user_permission == "":
+                        return render(request, 'manage_lost.html', context)
+                    else:
+                        return render(request, 'manage_lost_line.html', context)
                 else:
-                    return render(request, 'manage_lost.html', context)
+                    return render(request, 'sigin.html', context)
         except:
             return _generate_json_message(False, "login false")
 
