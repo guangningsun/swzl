@@ -406,6 +406,7 @@ def remove_user(request):
 def modify_user(request):
     try:
         if request.POST:
+            #import pdb;pdb.set_trace()
             user_info = UserInfo.objects.get(user_id=request.POST['user_id'])
             user_info.username = request.POST['username']
             user_info.username = request.POST['login_name']
@@ -414,7 +415,7 @@ def modify_user(request):
             user_info.create_time = request.POST['create_time']
             user_info.is_deleted = request.POST['is_deleted']
             user_info.description = request.POST['description']
-            user_info.class_id = request.POST['class_id']
+            user_info.class_id = request.POST['m_class_id']
             user_info.save()
         return HttpResponseRedirect('/manage_user')
     except:
@@ -464,7 +465,7 @@ def user_login(request):
                 user_info = UserInfo.objects.get(username=login_username)
             if user_info is not None:
                 if user_info.password == login_password:
-                    if user_info.user_permission == "":
+                    if user_info.user_permission == "0":
                         return render(request, 'manage_lost.html', context)
                     else:
                         return render(request, 'manage_lost_line.html', context)
