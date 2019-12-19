@@ -284,7 +284,22 @@ def get_all_lost(request):
         list_response.append(dict_tmp)
     return _generate_json_from_models(list_response)
 
+# 后台方法，线路管理员使用
+def glbline_num(request):
+    list_response = []
+    bus_line_name = request.POST['bus_line_name']
+    list_lost = LostInfo.objects.all()
+    if bus_line_name:
+        list_lost = list_lost.filter(bus_line_name=bus_line_name)
+    for res in list_lost:
+        dict_tmp = {}
+        dict_tmp.update(res.__dict__)
+        dict_tmp.pop("_state", None)
+        list_response.append(dict_tmp)
+    return _generate_json_from_models(list_response)
 
+
+# 手机端方法
 def get_lost_by_bus_line(request):
     list_response = []
     search_date = request.POST['search_date']
@@ -468,6 +483,7 @@ def user_login(request):
                     if user_info.user_permission == "0":
                         return render(request, 'manage_lost.html', context)
                     else:
+                        context = {'line_num':user_info.class_id}
                         return render(request, 'manage_lost_line.html', context)
                 else:
                     return render(request, 'sigin.html', context)
