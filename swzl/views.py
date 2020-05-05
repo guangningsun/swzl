@@ -284,7 +284,22 @@ def get_all_lost(request):
         list_response.append(dict_tmp)
     return _generate_json_from_models(list_response)
 
+# 后台方法，线路管理员使用
+def glbline_num(request):
+    list_response = []
+    bus_line_name = request.POST['bus_line_name']
+    list_lost = LostInfo.objects.all()
+    if bus_line_name:
+        list_lost = list_lost.filter(bus_line_name=bus_line_name)
+    for res in list_lost:
+        dict_tmp = {}
+        dict_tmp.update(res.__dict__)
+        dict_tmp.pop("_state", None)
+        list_response.append(dict_tmp)
+    return _generate_json_from_models(list_response)
 
+
+# 手机端方法
 def get_lost_by_bus_line(request):
     list_response = []
     search_date = request.POST['search_date']
@@ -346,7 +361,7 @@ def web_modify_lost(request):
     try:
         if request.POST:
             lost_info = LostInfo.objects.get(lost_id=request.POST['lost_id'])
-            if lost_info.is_received and lost_info.is_received == 0:
+            if lost_info.is_received == "0":
                 lost_info.received_name = request.POST['received_name']
                 lost_info.received_id_card = request.POST['received_id_card']
                 lost_info.received_phone_number = request.POST['received_phone_number']
@@ -406,6 +421,7 @@ def remove_user(request):
 def modify_user(request):
     try:
         if request.POST:
+            #import pdb;pdb.set_trace()
             user_info = UserInfo.objects.get(user_id=request.POST['user_id'])
             user_info.username = request.POST['username']
             user_info.username = request.POST['login_name']
@@ -414,7 +430,7 @@ def modify_user(request):
             user_info.create_time = request.POST['create_time']
             user_info.is_deleted = request.POST['is_deleted']
             user_info.description = request.POST['description']
-            user_info.class_id = request.POST['class_id']
+            user_info.class_id = request.POST['m_class_id']
             user_info.save()
         return HttpResponseRedirect('/manage_user')
     except:
@@ -464,9 +480,13 @@ def user_login(request):
                 user_info = UserInfo.objects.get(username=login_username)
             if user_info is not None:
                 if user_info.password == login_password:
-                    return render(request, 'manage_lost.html', context)
+                    if user_info.user_permission == "0":
+                        return render(request, 'manage_lost.html', context)
+                    else:
+                        context = {'line_num':user_info.class_id}
+                        return render(request, 'manage_lost_line.html', context)
                 else:
-                    return render(request, 'manage_lost.html', context)
+                    return render(request, 'sigin.html', context)
         except:
             return _generate_json_message(False, "login false")
 

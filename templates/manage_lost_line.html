@@ -33,6 +33,7 @@
 </head>
 
 <body>
+    <input name="line_num_hidden" id="line_num_hidden" type="hidden"/>
     <section class="hbox stretch">
         <!-- .aside -->
         <aside class="bg-dark aside-sm" id="nav">
@@ -71,28 +72,10 @@
                     <!-- nav -->
                     <nav class="nav-primary hidden-xs">
                             <ul class="nav">
-                                    <li>
-                                        <a href="/manage_user">
-                                            <i class="icon-home"></i>
-                                            <span>用户管理</span>
-                                        </a>
-                                    </li>
                                     <li class="active">
                                             <a href="/manage_lost">
                                                 <i class="icon-tasks"></i>
                                                 <span>失物管理</span>
-                                            </a>
-                                        </li>
-                                        <li >
-                                            <a href="/manage_bus">
-                                                <i class="icon-tasks"></i>
-                                                <span>公交线路管理</span>
-                                            </a>
-                                        </li>
-                                        <li >
-                                            <a href="/manage_type">
-                                                <i class="icon-tasks"></i>
-                                                <span>失物类型管理</span>
                                             </a>
                                         </li>
                                 </ul>
@@ -377,7 +360,7 @@
     <!-- Bootstrap -->
     <!-- Sparkline Chart -->
     <!-- App -->
-    <script src="/static/chemira/js/manage_lost.js"></script>
+    <script src="/static/chemira/js/manage_lost_line.js"></script>
     <script type="text/javascript">
         $('.form_date').datetimepicker({
             language: 'zh-CN',
@@ -531,6 +514,10 @@
             }
         });
     }
+
+    var aaa=JSON.parse('{{ line_num |safe }}');
+    document.getElementById("line_num_hidden").value = aaa
+    console.log("sgn====="+aaa)
 </script>
 </body>
 

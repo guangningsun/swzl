@@ -38,6 +38,10 @@ $(document).ready(function() {
     var $table = $('#table'),
         $remove = $('#remove'),
         selections = [];
+
+    var get_lost_by_line_num = $('#line_num_hidden')
+    console.log("gnsun======++++"+get_lost_by_line_num[0].value)
+
     function operateFormatter(value, row, index) {
         if (row.dev_status === "空闲") {
             return [
@@ -287,10 +291,11 @@ $(document).ready(function() {
 
 
 
-
     $.ajax({
-        type: "GET",
-        url: '/get_all_lost',
+        type: "POST",
+        url: '/glbline_num',
+        dataType: "json",
+        data: { "bus_line_name": get_lost_by_line_num[0].value },
         success: function(data) {
             var allRoomDataObjs = eval(data);
             for(var i = 0; i < allRoomDataObjs.length; i++){
