@@ -8,7 +8,7 @@
             <view class="cu-card article" v-for="(item,index) in lost_result_data" :key="index">
                 <view class="cu-item shadow">
                     <view class="content">
-                        <image class="bg-gray margin-top-sm shadow shadow-lg" :src='"http://114.115.136.120:8002/image_file/" + item.image_obj'
+                        <image class="bg-gray margin-top-sm shadow shadow-lg" :src='"https://brilliantlife.com.cn:8002/image_file/" + item.image_obj'
                                mode="aspectFill"></image>
                         <view class="desc padding-top-sm">
 

@@ -138,7 +138,7 @@
                     this.showModal(e);
                 } else {
                     uni.request({
-                        url: 'http://114.115.136.120:8002/web_modify_lost',
+                        url: 'https://brilliantlife.com.cn:8002/web_modify_lost',
                         method: "POST",
                         dataType: 'json',
                         header: {

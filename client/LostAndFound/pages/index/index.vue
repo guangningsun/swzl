@@ -99,7 +99,7 @@
             requestBusRoute() {
                 var bus_list = this.bus_route_picker;
                 uni.request({
-                    url: 'http://114.115.136.120:8002/get_all_bus_line',
+                    url: 'https://brilliantlife.com.cn:8002/get_all_bus_line',
                     method: "POST",
                     dataType: 'json',
                     header: {
@@ -120,7 +120,7 @@
             requestLostType() {
                 var lostTypeList = this.type_picker;
                 uni.request({
-                    url: 'http://114.115.136.120:8002/get_all_type',
+                    url: 'https://brilliantlife.com.cn:8002/get_all_type',
                     method: "POST",
                     dataType: 'json',
                     header: {
@@ -189,7 +189,7 @@
                 console.log("bus_line_name:" + bus_line_name);
 
                 uni.request({
-                    url: 'http://114.115.136.120:8002/get_lost_by_bus_line',
+                    url: 'https://brilliantlife.com.cn:8002/get_lost_by_bus_line',
                     method: "POST",
                     dataType: 'json',
                     header: {
