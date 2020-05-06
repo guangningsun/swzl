@@ -115,6 +115,7 @@
                 this.checkBtnEnable();
             },
             busRoutePickerChange(e) {
+				this.route_picker_index = e.detail.value;
 				this.showSearch = false;
                 if (this.route_picker_index === -1) {
                     this.route_picker_index = 0;
@@ -124,6 +125,7 @@
                 this.checkBtnEnable();
             },
             typePickerChange(e) {
+				this.type_picker_index = e.detail.value;
                 if (this.type_picker_index === -1) {
                     this.type_picker_index = 0;
                 } else {
