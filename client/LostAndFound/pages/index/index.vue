@@ -3,6 +3,15 @@
         <cu-custom bgColor="bg-gradual-blue" :isBack="false">
             <block slot="content">滨海公交失物招领</block>
         </cu-custom>
+		<view v-show="showSearch" class="cu-bar bg-white search fixed" :style="[{top:CustomBar + 'px'}]">
+			<view class="search-form round">
+				<text class="cuIcon-search"></text>
+				<input type="text" placeholder="输入路线" confirm-type="search" v-model="route_search" @input="onInput"></input>
+			</view>
+			<!-- <view class="action">
+				<button class="cu-btn bg-gradual-green round" @click="onClickSearchRoute">搜索</button>
+			</view> -->
+		</view>
         <view class="cu-card case no-card">
             <view class="cu-item shadow">
                 <view class="image">
@@ -28,7 +37,7 @@
         <!--</view>-->
         <view class="cu-form-group">
             <view class="title">请选择路线</view>
-            <picker @change="busRoutePickerChange" :value="route_picker_index" :range="bus_route_picker">
+            <picker @confirm="onCancelRoutePicker" @cancel="onCancelRoutePicker" @change="busRoutePickerChange" :value="route_picker_index" :range="bus_route_picker" @tap="onClickRoutePicker">
                 <view class="picker">
                     {{route_picker_index>-1 ? bus_route_picker[route_picker_index]:'选择公交线路'}}
                 </view>
@@ -60,19 +69,53 @@
                 date: '2019-11-01',
                 bus_route_picker: [],
                 type_picker: [],
-                btn_disabled: true
+                btn_disabled: true,
+				CustomBar: this.CustomBar,
+				showSearch:false,
+				route_search:''
             };
         },
+		onLoad() {
+			this.requestBusRoute();
+			this.requestLostType();
+			this.date = this.getTodayDate();
+			this.time = this.getNowTime();
+		},
         methods: {
+			onInput(e){
+				// console.log(e.detail.value);
+				var inputKeyword = e.detail.value;
+				var routeArray = this.bus_route_picker;
+				var searchResultArray = [];
+				if(routeArray.length > 0){
+					for (var i = 0; i < routeArray.length; i++) {
+						if(routeArray[i].indexOf(inputKeyword) >= 0){
+							searchResultArray.push(routeArray[i]);
+						}
+					}
+				}
+				console.log(searchResultArray);
+				if(searchResultArray.length > 0){
+					let index = routeArray.indexOf(searchResultArray[0]);
+					this.route_picker_index = index;
+				}
+			},
             timeChange(e) {
                 this.time = e.detail.value;
                 this.checkBtnEnable();
             },
+			onClickRoutePicker(){
+				this.showSearch = true;
+			},
+			onCancelRoutePicker(){
+				this.showSearch = false;
+			},
             dateChange(e) {
                 this.date = e.detail.value;
                 this.checkBtnEnable();
             },
             busRoutePickerChange(e) {
+				this.showSearch = false;
                 if (this.route_picker_index === -1) {
                     this.route_picker_index = 0;
                 } else {
@@ -218,13 +261,6 @@
                     }
                 });
             }
-        },
-        onShow() {
-            this.requestBusRoute();
-            this.requestLostType();
-
-            this.date = this.getTodayDate();
-            this.time = this.getNowTime();
         }
     }
 </script>

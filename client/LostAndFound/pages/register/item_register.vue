@@ -13,10 +13,6 @@
 
         <form>
             <view class="cu-form-group">
-                <view class="title">身份证号</view>
-                <input placeholder="请输入证件号" name="input" v-model="id_card_number"/>
-            </view>
-            <view class="cu-form-group">
                 <view class="title">姓名</view>
                 <input placeholder="请输入姓名" name="input" v-model="owner_name"/>
             </view>
@@ -79,7 +75,6 @@
     export default {
         data() {
             return {
-                id_card_number: '',
                 owner_name: '',
                 owner_tel: '',
                 itemDescValue: '',
@@ -132,8 +127,7 @@
             },
             onSubmit(e) {
 
-                if (this.id_card_number == '' || this.id_card_number == undefined || this.id_card_number == null
-                    || this.owner_name == '' || this.owner_name == undefined || this.owner_name == null
+                if (this.owner_name == '' || this.owner_name == undefined || this.owner_name == null
                     || this.owner_tel == '' || this.owner_tel == undefined || this.owner_tel == null) {
                     this.showModal(e);
                 } else {
