@@ -6,7 +6,7 @@
 		<view v-show="showSearch" class="cu-bar bg-white search fixed" :style="[{top:CustomBar + 'px'}]">
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
-				<input type="text" placeholder="输入路线" confirm-type="search" v-model="route_search" @input="onInput"></input>
+				<input type="text" placeholder="输入路线" confirm-ty	pe="search" v-model="route_search" @input="onInput"></input>
 			</view>
 			<!-- <view class="action">
 				<button class="cu-btn bg-gradual-green round" @click="onClickSearchRoute">搜索</button>
@@ -144,7 +144,7 @@
             requestBusRoute() {
                 var bus_list = this.bus_route_picker;
                 uni.request({
-                    url: 'https://brilliantlife.com.cn:8002/get_all_bus_line',
+                    url: 'https://swzl.tjbhbus.com:8002/get_all_bus_line',
                     method: "POST",
                     dataType: 'json',
                     header: {
@@ -165,7 +165,7 @@
             requestLostType() {
                 var lostTypeList = this.type_picker;
                 uni.request({
-                    url: 'https://brilliantlife.com.cn:8002/get_all_type',
+                    url: 'https://swzl.tjbhbus.com:8002/get_all_type',
                     method: "POST",
                     dataType: 'json',
                     header: {
@@ -234,7 +234,7 @@
                 console.log("bus_line_name:" + bus_line_name);
 
                 uni.request({
-                    url: 'https://brilliantlife.com.cn:8002/get_lost_by_bus_line',
+                    url: 'https://swzl.tjbhbus.com:8002/get_lost_by_bus_line',
                     method: "POST",
                     dataType: 'json',
                     header: {

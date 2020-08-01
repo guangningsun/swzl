@@ -75,7 +75,7 @@
             this.item_address = this.lost_detail.receive_address;
             this.item_desc = this.lost_detail.received_desc;
             this.tel = this.lost_detail.contact_number;
-            this.image = "https://brilliantlife.com.cn:8002/image_file/" + this.lost_detail.image_obj;
+            this.image = "https://swzl.tjbhbus.com:8002/image_file/" + this.lost_detail.image_obj;
         }
     }
 </script>

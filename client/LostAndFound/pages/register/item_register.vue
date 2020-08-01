@@ -132,7 +132,7 @@
                     this.showModal(e);
                 } else {
                     uni.request({
-                        url: 'https://brilliantlife.com.cn:8002/web_modify_lost',
+                        url: 'https://swzl.tjbhbus.com:8002/web_modify_lost',
                         method: "POST",
                         dataType: 'json',
                         header: {
